@@ -1,0 +1,138 @@
+:root {
+    --primario: #2353ac;
+    --secundario: rgb(226, 206, 94);
+    --oscuro: #333;
+    --claro: #fff;
+    --acento: #ff6b6b;
+    --fuente: Arial, sans-serif;
+    --diaabierto: rgb(96, 177, 42);
+    --diacerrado: rgb(163, 45, 45);
+    --diaparcial: rgb(194, 194, 40);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--fuente);
+    background-color: var(--secundario);
+    color: var(--oscuro);
+    line-height: 1.6;
+}
+
+header.cabecera {
+    background-color: var(--secundario);
+    border-bottom: 3px solid var(--secundario);
+}
+
+section.barra_superior {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+section.logoynombre {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo {
+    max-height: 150px;
+}
+
+.nombre_club {
+    font-size: 3rem;
+    color: var(--oscuro);
+}
+
+.link_alta {
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    color: var(--primario);
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: var(--primario);
+  padding: 0.5rem;
+  gap: 1rem;
+  margin: 0;
+}
+
+nav a {
+  color: var(--claro);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.imagen_principal img {
+    width: 100%;
+    height: auto;   
+    display: block;
+}
+
+.flecha {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    margin-right: 0.5rem;
+    background-image: url('imagenes/arrow.gif');
+    background-size: contain;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease; 
+}
+
+nav a:hover .flecha {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+body, html {
+    width: 100%;
+    margin: 0;        
+    padding: 0;
+}
+
+footer {
+    background-color: var(--secundario);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+}
+
+#galeria-actividades {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin 10rem 10 rem;
+}
+
+#contenedor-actividades {
+    grid-template-columns: 1fr;
+}
+
+.actividad {
+    background-color: var(--claro);
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 1rem;
+    text-decoration: none;
+    color: black;
+    border-radius: 10px;
+}
+
+.actividad img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+}
