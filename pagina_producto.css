@@ -1,0 +1,105 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 2000px;
+    height: 450px;
+  
+    background-color: white;
+    display: flex;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.info {
+    flex: 1;
+    padding: 30px;
+}
+
+.info h1 {
+    color: #df3232;
+    margin-top: 0;
+}
+
+.info p {
+    margin: 10px 0;
+    font-size: 1rem;
+}
+
+.price {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.carrito-btn {
+    background-color: #df3232;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.carrito-btn:hover {
+    background-color: #b82929;
+    transform: scale(1.05);
+}
+
+.image {
+    flex: 1;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.image img {
+    max-width: 100%;
+    max-height: auto;
+    object-fit: contain;
+}
+
+.producto-layout {
+    display: flex;
+    align-items: start;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+
+.back-button {
+    display: inline-block;
+    margin: 20px 40px 10px 40px; /* margen arriba, derecha, abajo, izquierda */
+    color: #df3232;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1rem;
+    background-color: #ffffff;
+    border: 2px solid #df3232;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+
+
+.back-button:hover {
+    background-color: #df3232;
+    color: #fff;
+}
