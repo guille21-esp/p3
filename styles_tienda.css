@@ -1,138 +1,244 @@
+/* Estilos generales */
 :root {
-    --primario: #2353ac;
-    --secundario: rgb(226, 206, 94);
-    --oscuro: #333;
-    --claro: #fff;
-    --acento: #ff6b6b;
-    --fuente: Arial, sans-serif;
-    --diaabierto: rgb(96, 177, 42);
-    --diacerrado: rgb(163, 45, 45);
-    --diaparcial: rgb(194, 194, 40);
-}
-
-* {
-    margin: 0;
-    padding: 0;
+    --secundario: #2c3e50;
 }
 
 body {
-    font-family: var(--fuente);
-    background-color: var(--secundario);
-    color: var(--oscuro);
-    line-height: 1.6;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
-header.cabecera {
-    background-color: var(--secundario);
-    border-bottom: 3px solid var(--secundario);
-}
-
-section.barra_superior {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+/* Cabecera */
+.cabecera {
     padding: 1rem;
+    background-color: #df3232;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-section.logoynombre {
+.barra_superior {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+/* Logo y nombre */
+.logoynombre {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 20px;
 }
 
-.logo {
-    max-height: 150px;
+.logoynombre img {
+    height: 200px;
+    width: auto;
+    margin-left: 150px;
 }
 
-.nombre_club {
-    font-size: 3rem;
-    color: var(--oscuro);
+.logoynombre figcaption {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 52px;
+    font-weight: bold;
+    white-space: nowrap;
+    color: #f1f1f1; /* Color original */
+}
+
+/* Formulario de login */
+.login {
+    background: #e0d2d2;
+    border: 1px solid #e0e0e0;
+    width: 240px;
+    padding: 15px;
+    margin-left: auto;
+    margin-right: 50px;
+    font-size: 12px;
+    border-radius: 5px;
+
+}
+
+.login p {
+    margin: 0 0 6px 0;
+}
+
+.login label {
+    display: block;
+    margin-bottom: 2px;
+    color: #555;
+}
+
+.login input {
+    width: 100%;
+    padding: 4px 6px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    box-sizing: border-box;
+    height: 24px;
+    font-size: 12px;
+}
+
+.login button {
+    width: 100%;
+    padding: 4px;
+    background-color: #df3232; /* Color original azul */
+    color: white;
+    border: none;
+    border-radius: 2px;
+    font-size: 12px;
+    height: 24px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.login button:hover {
+    background-color: #1a428f;
 }
 
 .link_alta {
-    margin-top: 0.3rem;
-    font-size: 0.8rem;
-    color: var(--primario);
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  background-color: var(--primario);
-  padding: 0.5rem;
-  gap: 1rem;
-  margin: 0;
-}
-
-nav a {
-  color: var(--claro);
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.imagen_principal img {
-    width: 100%;
-    height: auto;   
     display: block;
+    text-align: center;
+    margin-top: 6px;
+    color: #2353ac; /* Color original azul */
+    font-size: 11px;
+    text-decoration: none;
 }
 
-.flecha {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    margin-right: 0.5rem;
-    background-image: url('imagenes/arrow.gif');
-    background-size: contain;
-    opacity: 0;
-    transform: translateX(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease; 
+.link_alta:hover {
+    text-decoration: underline;
 }
 
-nav a:hover .flecha {
-    opacity: 1;
-    transform: translateX(0);
-  }
+/* Galería de productos */
+#contenedor-actividades {
+    padding: 20px;
+}
 
-body, html {
+/* Galería de productos */
+#galeria-actividades {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas fijas */
+    gap: 15px; /* Reducir el espacio entre cartas */
+    padding: 15px 0;
+}
+
+.actividad {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none;
+    color: #333;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: transform 0.2s;
+    position: relative;
+    height: 320px; /* Altura total del bloque */
+}
+.actividad:hover {
+    transform: translateY(-3px);
+    transform: scale(1.05);
+}
+.actividad .imagen-container {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f8f8f8;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.actividad img {
+    display: block;
+    width: auto; /* Evita estiramiento lateral */
+    height: 100%; /* Ocupa toda la altura del contenedor de imagen */
+    max-width: 100%; /* Para que no se salga del ancho */
+    object-fit: contain;
+    margin: auto; /* Centra horizontal y vertical */
+}
+
+
+
+
+/* Fondo rojo para el área de texto */
+.actividad::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    margin: 0;        
-    padding: 0;
+    height: calc(100% - 180px); /* Resta la altura de la imagen */
+    background-color: #df3232; /* Rojo Pokémon */
+    z-index: 0; /* Detrás del contenido */
 }
 
-footer {
-    background-color: var(--secundario);
+/* Ajustes para el texto */
+.actividad h3, 
+.actividad p {
+    margin: 8px 10px;
+    position: relative; /* Para que aparezca sobre el fondo */
+    z-index: 1; /* Texto sobre el fondo rojo */
+    color: white; /* Texto blanco para contraste */
+    margin-bottom: 5px;
+}
+
+.actividad h3 {
+    font-size: 0.95rem;
+    padding-top: 10px; /* Espacio superior */
+}
+
+.actividad p {
+    font-size: 0.85rem;
+}
+
+.actividad p:last-child {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: white; /* Precio también en blanco */
+}
+
+
+/* Pie de página */
+.pie {
+    background-color: #df3232;
     color: white;
     text-align: center;
     padding: 1rem;
     margin-top: 2rem;
 }
 
-#galeria-actividades {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin 10rem 10 rem;
-}
-
-#contenedor-actividades {
-    grid-template-columns: 1fr;
-}
-
-.actividad {
-    background-color: var(--claro);
-    border: 1px solid #ccc;
-    text-align: center;
-    padding: 1rem;
+.pie a {
+    color: white;
     text-decoration: none;
-    color: black;
-    border-radius: 10px;
+    margin: 0 10px;
+    font-size: 20px;
+    text-decoration:solid;
 }
 
-.actividad img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
+.pie a:hover {
+    text-decoration: underline;
+}
+
+.carrito-btn {
+    background-color: #e0d2d2; /* rojo como tu fondo */
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.carrito-btn:hover {
+    background-color: #b82929; /* un rojo más oscuro */
+    transform: scale(1.05);
 }

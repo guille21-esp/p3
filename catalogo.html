@@ -3,104 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Club Deportivo Raymon</title>
+    <link rel="icon" type="image/jpg" href="pokeball.gif"/>
+    <title>Gotta Collect 'Em All</title>
     <link rel="stylesheet" href="styles_tienda.css">
 </head>
 <body>
     <header class="cabecera">
         <section class="barra_superior">
-            <section class="logoynombre">
-                <img class=logo src="logo.jpeg" alt="Logo del club" />
-                <h1 class="nombre_club">Gotta Collect 'em all!</h1>
-            </section>
-            <section class="login-box">
-                <form class="login">
-                    <p>
-                        <label for="usuario">Usuario</label><br />
-                        <input type="text" id="usuario" name="usuario" required />
-                    </p>
-                    <p>
-                        <label for="contrasena">Contraseña</label><br />
-                        <input type="password" id="contrasena" name="contrasena" required />
-                    </p>
-                    <p>
-                        <button type="submit">Entrar</button>
-                    </p>
-                    <a class= link_alta href="altausuarios.html">¿No tienes cuenta?</a>
-                </form>
-            </section>  
+            <figure class="logoynombre">
+              <img src="pokeball.gif" alt="Logo">
+              <figcaption>Gotta Collect 'Em All</figcaption>
+            </figure>
+            <form class="login">
+                <p>
+                    <label for="usuario">Usuario</label><br />
+                    <input type="text" id="usuario" name="usuario" required />
+                </p>
+                <p>
+                    <label for="contrasena">Contraseña</label><br />
+                    <input type="password" id="contrasena" name="contrasena" required />
+                </p>
+                <p>
+                    <button type="submit">Entrar</button>
+                </p>
+                <a class= link_alta href="altausuarios.html">¿No tienes cuenta?</a>
+            </form>
+            <p>
+                <button type="button" class="carrito-btn">
+                    🛒 Carrito de compra
+                </button>
+            </p>
+
+            
         </section>
             
     </header>
     <main id="contenedor-actividades">
         
         <section id="galeria-actividades">
-            <a href="actividad_futbol7.html" class="actividad">
-                <img src="chispas.jpg" alt="Fútbol 7">
+            <a href="pagina_producto.html" class="actividad">
+                <div class="imagen-container">
+                     <img src="chispas.jpg" alt="chispas">
+                </div>
+                
                 <h3>Pack de cartas: chispas fulgurantes</h3>
                 <p>10 cartas de juego</p>
                 <p>5€</p>
             </a>
-            <a href="actividad_futbol11.html" class="actividad">
-                <img src="silvertempest.jpeg"">
+            <a href="pagina_producto.html" class="actividad">
+                <div class="imagen-container">
+                     <img src="silvertempest.jpeg" alt="silver">
+                </div>
+                
                 <h3>Pack de cartas: silver tempest</h3>
                 <p>10 cartas de juego</p>
                 <p>5€</p>
             </a>
-            <a href="actividad_natacion.html" class="actividad">
-                <img src="charizard.jpeg" alt="Natación">
+            <a href="pagina_producto.html" class="actividad">
+                <div class="imagen-container">
+                     <img src="charizard.jpeg" alt="charizard">
+                </div>
+                
                 <h3>Charizard PS10</h3>
                 <p>Carta individual Charizard</p>
                 <p>100.000€</p>
             </a>
-            <a href="actividad_voleybol.html" class="actividad">
-                <img src="brechaparadojica.jpeg" alt="voleybol">
+            <a href="pagina_producto.html" class="actividad">
+                <div class="imagen-container">
+                     <img src="brechaparadojica.jpeg" alt="brecha">
+                </div>
+                
                 <h3>Lote de sobres: brecha paradojica</h3>
                 <p>6 sobres de cartas</p>
                 <p>30€</p>
             </a>
-            <a href="actividad_natacion_sincronizada.html" class="actividad">
-                <img src="lotecharizard.jpeg" alt="Natación sicronizada">
+            <a href="pagina_producto.html" class="actividad">
+                <div class="imagen-container">
+                     <img src="lotecharizard.jpeg" alt="lote">
+                </div>
+                
                 <h3>Lote de paquetes: charizard</h3>
                 <p>6 sobres de sobres: giga charizard</p>
                 <p>30€</p>
             </a>
-            <a href="actividad_trampolin.html" class="actividad">
-                <img src="journeytogether.jpeg" alt="Trampolin">
+            <a href="pagina_producto.html" class="actividad">
+                <div class="imagen-container">
+                     <img src="journeytogether.jpeg" alt="journey">
+                 </div>
                 <h3>Sobre de cartas: journey together</h3>
                 <p>10 cartas de juego</p>
                 <p>5€</p>
             </a>
-            <a href="actividad_tenis.html" class="actividad">
-                <img src="fundas.jpeg" alt="Tenis">
+            <a href="pagina_producto.html" class="actividad">
+                <div class="imagen-container">
+                     <img src="fundas.jpeg" alt="fundas">
+                </div>
+                
                 <h3>Fundas para cartas</h3>
                 <p>Fundas protectoras para cartas individuales</p>
                 <p>1€</p>
             </a>
-            <a href="actividad_tenis_dobles.html" class="actividad">
-                <img src="estuche.jpeg" alt="Tenis dobles">
+            <a href="pagina_producto.html" class="actividad">
+                <div class="imagen-container">
+                     <img src="estuche.jpeg" alt="estuche">
+                </div>
+                
                 <h3>Estuchera metalica para cartas</h3>
                 <p>Estuche protector para tu baraja</p>
                 <p>3€</p>
             </a>
-            <a href="actividad_baloncesto.html" class="actividad">
-                <img src="pikachu.jpeg" alt="Baloncesto">
+            <a href="pagina_producto.html" class="actividad">
+                <div class="imagen-container">
+                     <img src="pikachu.jpeg" alt="pikachu">
+                </div>
+                
                 <h3>Pikachu PSA10</h3>
                 <p>Carta individual pikachu</p>
                 <p>80.000€</p>
             </a>  
         </section>
     </main>
-    
-    <section id="paginacion">
-        <a href="actividadesnext.html">Siguiente</a>
-    </section>
-    
+      
 
     <footer class="pie">
         <p>
-            <a href="contacto.html">Contacto</a>
-            <a href="como_se_hizo.pdf">Cómo se hizo</a>
+            <a href="contacto.html">¿Alguna duda? Contáctanos</a>
+            |
+            <a href="contacto.html">Metodos de pago</a>
+            |
+            <a href="contacto.html">Comunidad</a>
         </p>
     </footer>
 </body>
