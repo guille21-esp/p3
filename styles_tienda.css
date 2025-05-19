@@ -242,3 +242,47 @@ body {
     background-color: #b82929; /* un rojo más oscuro */
     transform: scale(1.05);
 }
+
+
+/* barra inferior */
+.barra_inferior {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    color : #333;
+}
+
+.barra_inferior form {
+    display: flex;
+    justify-content: center;
+    margin-top: 0;
+  }
+
+  .barra_inferior input[type="search"] {
+    width: 500px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px 0 0 8px;
+    border: 1px solid #ccc;
+  }
+
+  .barra_inferior button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 0 8px 8px 0;
+    border: 1px solid #ccc;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+  }
+
+  .barra_inferior button:hover {
+    background-color: #45a049;
+  }
+  .centro-busqueda {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
