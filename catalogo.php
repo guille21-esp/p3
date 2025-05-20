@@ -8,50 +8,13 @@
     <link rel="stylesheet" href="css/styles_tienda.css">
 </head>
 <body>
-    <header class="cabecera">
-        <section class="barra_superior">
-            <figure class="logoynombre">
-              <img src="imgs/pokeball.gif" alt="Logo">
-              <figcaption>Gotta Collect 'Em All</figcaption>
-            </figure>
-            <form class="login">
-                <p>
-                    <label for="usuario">Usuario</label><br />
-                    <input type="text" id="usuario" name="usuario" required />
-                </p>
-                <p>
-                    <label for="contrasena">Contraseña</label><br />
-                    <input type="password" id="contrasena" name="contrasena" required />
-                </p>
-                <p>
-                    <button type="submit">Entrar</button>
-                </p>
-                <a class= link_alta href="altausuarios.html">¿No tienes cuenta?</a>
-            </form>
-            <p>
-                <button type="button" class="carrito-btn" onclick="window.location.href='carrito.html'">
-                    🛒 Carrito de compra
-                </button>
-            </p>
-        </section>
-
-        <div class="barra_inferior">
-          <div class="centro-busqueda">
-            <form action="/buscar" method="GET">
-              <input type="search" name="q" placeholder="Buscar..." />
-              <button type="submit">Buscar</button>
-            </form>
-          </div>
-        </div>
-        
-            
-    </header>
+    <?php include 'elementos/header.php'; ?>
     <main id="contenedor-actividades">
         
         <section id="galeria-actividades">
             <a href="pagina_producto.html" class="actividad">
                 <div class="imagen-container">
-                     <img src="chispas.jpg" alt="chispas">
+                     <img src="imgs/chispas.jpg" alt="chispas">
                 </div>
                 
                 <h3>Pack de cartas: chispas fulgurantes</h3>
