@@ -1,3 +1,13 @@
+<?php
+session_start();
+if(!isset($_SESSION['form_completed'])) {
+    header('Location: altausuarios.php');
+    exit();
+}
+
+unset($_SESSION['form_completed']);
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

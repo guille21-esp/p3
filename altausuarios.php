@@ -1,3 +1,79 @@
+<?php
+
+// 1. Inicializamos las variables y los errores en un array de asignación
+$formSent = $_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST);
+
+
+$allOK = false;
+
+
+$campos = [
+    'nombre' => '',
+    'apellidos' => '',
+    'nacimiento' => '',
+    'email' => '',
+    'tlf' => '',
+    'intereses' => '',
+    'compra' => '',
+    'coleccion' => ''
+];
+
+$error = [
+    'nombre' => '',
+    'apellidos' => '',
+    'nacimiento' => '',
+    'email' => '',
+    'tlf' => '',
+    'intereses' => '',
+    'compra' => '',
+    'coleccion' => ''
+];
+
+// 2. Procesamos el formulario cuando se envía la primera vez
+foreach ($campos as $campo => $valor) {
+    $campos[$campo] = $_POST[$campo] ?? '';
+}
+
+// Realizamos la validación de datos sólo si se ha enviado el formulario
+if ($formSent) {
+    if (empty($campos['nombre']))
+        $error['nombre'] = "El nombre es obligatorio.";
+    else if (is_numeric($campos['nombre']))
+        $error['nombre'] = "El nombre no puede ser numérico";
+    else if (!ctype_upper(substr($campos['nombre'],0,1)))
+        $error['nombre'] = "El nombre debe comenzar en mayúscula.";
+
+    if(empty($campos['apellidos']))
+        $error['apellidos'] = "Los apellidos son obligatorios. ";
+    else if (is_numeric($campos['apellidos']))
+        $error['apellidos'] = "Los apellidos no pueden ser numéricos";
+    else if (!ctype_upper(substr($campos['apellidos'],0,1)))
+        $error['apellidos'] = "Los apellidos deben comenzar en mayúscula.";
+
+    if(empty($campos['nacimiento']))
+        $error['nacimiento'] = "La fecha no puede estar vacía.";
+    else if(!mayorEdad($campos['nacimiento']))
+        $error['nacimiento'] = "Debes ser mayor de edad.";
+
+    if(empty($campos['email']))
+        $error['email'] = "El email no puede estar vacío.";
+    else if(!filter_var($campos['email'], FILTER_VALIDATE_EMAIL))
+        $error['email'] = "El email no es válido.";
+
+    $allOK = !array_filter($error);
+
+    if($allOK){
+        session_start();
+        $_SESSION['form_completed'] = true;
+        header("Location: exito.php");
+        exit();
+    }
+}
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,41 +85,61 @@
     <link rel="stylesheet" href="css/altausuarios.css">
 </head>
 <body>
-    <?php include 'elementos/header.html'; ?>
+    <?php include 'elementos/header.php'; ?>
     <main id="formulario">
         
         <section>
         <h2>Formulario de Inscripción</h2>
         
-        <form action="exito.html" method="get" class="form_1">
+        <form action="altausuarios.php" method="post" class="form_1">
             <section class="form-linea">
                 <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" required>
+                <input type="text" id="nombre" name="nombre" required
+                        value="<?= $campos['nombre'] ?? ''; ?>">
+                <?php if(!empty($error['nombre'])): ?>
+                    <span class="error"><?= $error['nombre']; ?></span>
+                <?php endif; ?>
             </section>
             
             <section class="form-linea">
                 <label for="apellidos">Apellidos:</label>
-                <input type="text" id="apellidos" name="apellidos" required>
+                <input type="text" id="apellidos" name="apellidos" required
+                        value="<?= $campos['apellidos'] ?? ''; ?>">
+                <?php if(!empty($error['apellidos'])): ?>
+                    <span class="error"><?= $error['apellidos']; ?></span>
+                <?php endif; ?>        
             </section>
 
             <section class="form-linea">
-                <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                <label for="nacimiento">Fecha de Nacimiento:</label>
+                <input type="date" id="fecha_nacimiento" name="nacimiento" required
+                        value="<?= $campos['nacimiento'] ?? ''; ?>" >
+                <?php if(!empty($error['nacimiento'])): ?>
+                    <span class="error"><?= $error['nacimiento']; ?></span>
+                <?php endif; ?>
             </section>
 
             <section class="form-linea">
                 <label for="email">Correo Electrónico:</label>
-                <input type="email" id="email" name="email" required pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$">
+                <input type="email" id="email" name="email" required pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                        value="<?= $campos['email'] ?? ''; ?>">
+                <?php if(!empty($error['email'])): ?>
+                    <span class="error"><?= $error['email']; ?></span>
+                <?php endif; ?>
             </section>
 
             <section class="form-linea">
-                <label for="telefono">Teléfono de contacto:</label>
-                <input type="tel" id="telefono" name="telefono" required maxlength="9">
+                <label for="tlf">Teléfono de contacto:</label>
+                <input type="tel" id="telefono" name="tlf" required maxlength="9"
+                        value="<?= $campos['tlf'] ?? '';?>">
+                <?php if(!empty($error['tlf'])): ?>
+                    <span class="error"><?= $error['tlf']; ?></span>
+                <?php endif; ?>
             </section>
 
             <section class="form-linea">
                 <label for="lista_intereses">¿Cuales son tus intereses?</label>
-                <input type="text" id="lista_intereses" name="lista_intereses" list="opciones_intereses" required>
+                <input type="text" id="lista_intereses" name="lista_intereses" list="opciones_intereses" required value="<?=$campos['intereses'] ?? '';?>">
                 <datalist id="opciones_intereses">
                     <option value="Coleccionismo">Coleccionismo</option>
                     <option value="Aficionado">Aficionado</option>
@@ -121,3 +217,16 @@
     </script>
 </body>
 </html>
+
+<?php 
+
+function mayorEdad($edad){
+    $fechaNacimiento = DateTime::createFromFormat('Y-m-d', $edad);
+    $hoy = new DateTime();
+    $mayoriaEdad = (clone $hoy)->modify('-18 years');
+
+    return $fechaNacimiento <= $mayoriaEdad;
+
+}
+
+?>
