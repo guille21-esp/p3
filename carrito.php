@@ -1,3 +1,25 @@
+<?php
+session_start();
+require_once 'Database.php';
+
+if(!isset($_SESSION['idCliente'])) {
+    header('Location: login.php');
+}
+
+$idCliente = $_SESSION['idCliente'];
+$conn = Database::getInstancia()->getConexion();
+
+// Obtener el ID del carrito activo del cliente (uno por cliente)
+$sql = 'SELECT ID_CARRITO FROM CARRITO_VENTAS WHERE ID_CLIENTE = :id_cliente';
+$stid = oci_parse($conn, $sql);
+oci_bind_by_name($stid, ":id_cliente", $idCliente);
+oci_execute($stid);
+$row = oci_fetch_assoc($stid);
+$idCarrito = $row ? $row['ID_CARRITO'] : null;
+
+$total = 0;
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -20,28 +42,63 @@
             <div class="contenedor">
                 <h1>Productos en el carrito</h1>
 
-                <div class="producto-carrito">
-                    <div class="imagen-cont">
-                        <img src="imgs/silvertempest.jpeg" alt="Pack Silver Tempest">
-                    </div>
+                <?php if (!$idCarrito): ?>
+                    <p>Tu carrito está vacío.</p>
+                <?php else: ?>
+                    <?php
+                    $sqlDetalles = "SELECT * FROM DETALLE_CARRITO WHERE ID_CARRITO = :id_carrito";
+                    $stidDetalles = oci_parse($conn, $sqlDetalles);
+                    oci_bind_by_name($stidDetalles, ":id_carrito", $idCarrito);
+                    oci_execute($stidDetalles);
+                    $hayProductos = false;
 
-                    <div class="info-carrito">
-                        <h3>Pack de cartas: Silver Tempest</h3>
-                        <p>10 cartas de juego</p>
-                        <p class="precio">5€</p>
-                        <div class="cantidad-cont">
-                            <button class="btn-cantidad">-</button>
-                            <span class="cantidad">1</span>
-                            <button class="btn-cantidad">+</button>
+                    while($detalle = oci_fetch_assoc($stidDetalles)):
+                        $hayProductos = true;
+                        $subtotal = $detalle['PRECIO'] * $detalle['CANTIDAD'];
+                        $total += $subtotal;
+                        ?>
+                        <div class="producto-carrito">
+                            <div class="imagen-cont">
+                                <img src="imgs/<?=htmlspecialchars($detalle['GTIN']) ?>.jpeg" alt="<?=htmlspecialchars($detalle['NOMBRE_PRODUCTO'])?>">
+                            </div>
+
+                            <div class="info-carrito">
+                                <h3><?= htmlspecialchars($detalle['NOMBRE_PRODUCTO']) ?></h3>
+                                <p><?= htmlspecialchars($detalle['CATEGORIA'])?></p>
+                                <p class="precio"><?= $detalle['PRECIO'] ?>€</p>
+                                <div class="cantidad-cont">
+                                    <form method="post" action="modificar_carrito.php" style="display: inline;">
+                                        <input type="hidden" name="id_producto" value="<?=$detalle['ID_PRODUCTO']?>">
+                                        <input type="hidden" name="accion" value="restar">
+                                        <button class="btn-cantidad">-</button>
+                                    </form>
+                                    <span class="cantidad"><?= $detalle['CANTIDAD'] ?> </span>
+                                    <form method="post" action="modificar_carrito.php" style="display: inline;">
+                                        <input type="hidden" name="id_producto" value="<?= $detalle['ID_PRODUCTO'] ?>">
+                                        <input type="hidden" name="accion" value="sumar">
+                                        <button class="btn-cantidad">+</button>
+                                    </form>
+                                </div>
+                                <form method="post" action="modificar_carrito.php">
+                                    <input type="hidden" name="id_producto" value="<?= $detalle['ID_PRODUCTO'] ?>">
+                                    <input type="hidden" name="accion" value="eliminar">
+                                    <button class="btn-cantidad">Eliminar</button>
+                                </form>
+                            </div>
                         </div>
-                        <button class="btn-eliminar">Eliminar</button>
-                    </div>
-                </div>
+                    <?php endwhile; ?>
 
-                <div class="total-carrito">
-                    <p>Total: <span>5€</span></p>
-                    <button class="btn-comprar">Finalizar compra</button>
-                </div>
+                    <?php if (!$hayProductos): ?>
+                        <p> Tu carrito está vacío. </p>
+                    <?php else: ?>
+                        <div class="total-carrito">
+                            <p>Total: <span><?=number_format($total, 2) ?>€</span></p>
+                            <form action="finalizar_compra.php" method="post">
+                                <button class="btn-comprar">Finalizar compra</button>
+                            </form>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
         </div>
     </main>

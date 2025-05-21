@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,7 +14,7 @@
     <main id="contenedor-actividades">
         
         <section id="galeria-actividades">
-            <a href="pagina_producto.html" class="actividad">
+            <a href="pagina_producto.php" class="actividad">
                 <div class="imagen-container">
                      <img src="imgs/chispas.jpg" alt="chispas">
                 </div>
@@ -21,7 +23,7 @@
                 <p>10 cartas de juego</p>
                 <p>5€</p>
             </a>
-            <a href="pagina_producto.html" class="actividad">
+            <a href="pagina_producto.php" class="actividad">
                 <div class="imagen-container">
                      <img src="imgs/silvertempest.jpeg" alt="silver">
                 </div>
@@ -30,7 +32,7 @@
                 <p>10 cartas de juego</p>
                 <p>5€</p>
             </a>
-            <a href="pagina_producto.html" class="actividad">
+            <a href="pagina_producto.php" class="actividad">
                 <div class="imagen-container">
                      <img src="imgs/charizard.jpeg" alt="charizard">
                 </div>
@@ -39,7 +41,7 @@
                 <p>Carta individual Charizard</p>
                 <p>100.000€</p>
             </a>
-            <a href="pagina_producto.html" class="actividad">
+            <a href="pagina_producto.php" class="actividad">
                 <div class="imagen-container">
                      <img src="imgs/brechaparadojica.jpeg" alt="brecha">
                 </div>
@@ -48,7 +50,7 @@
                 <p>6 sobres de cartas</p>
                 <p>30€</p>
             </a>
-            <a href="pagina_producto.html" class="actividad">
+            <a href="pagina_producto.php" class="actividad">
                 <div class="imagen-container">
                      <img src="imgs/lotecharizard.jpeg" alt="lote">
                 </div>
@@ -57,7 +59,7 @@
                 <p>6 sobres de sobres: giga charizard</p>
                 <p>30€</p>
             </a>
-            <a href="pagina_producto.html" class="actividad">
+            <a href="pagina_producto.php" class="actividad">
                 <div class="imagen-container">
                      <img src="imgs/journeytogether.jpeg" alt="journey">
                  </div>
@@ -65,7 +67,7 @@
                 <p>10 cartas de juego</p>
                 <p>5€</p>
             </a>
-            <a href="pagina_producto.html" class="actividad">
+            <a href="pagina_producto.php" class="actividad">
                 <div class="imagen-container">
                      <img src="imgs/fundas.jpeg" alt="fundas">
                 </div>
@@ -74,7 +76,7 @@
                 <p>Fundas protectoras para cartas individuales</p>
                 <p>1€</p>
             </a>
-            <a href="pagina_producto.html" class="actividad">
+            <a href="pagina_producto.php" class="actividad">
                 <div class="imagen-container">
                      <img src="imgs/estuche.jpeg" alt="estuche">
                 </div>
@@ -83,7 +85,7 @@
                 <p>Estuche protector para tu baraja</p>
                 <p>3€</p>
             </a>
-            <a href="pagina_producto.html" class="actividad">
+            <a href="pagina_producto.php" class="actividad">
                 <div class="imagen-container">
                      <img src="imgs/pikachu.jpeg" alt="pikachu">
                 </div>
