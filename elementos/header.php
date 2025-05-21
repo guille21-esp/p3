@@ -16,10 +16,10 @@
       <p>
         <button type="submit">Entrar</button>
       </p>
-      <a class= link_alta href="altausuarios.html">¿No tienes cuenta?</a>
+      <a class= link_alta href="altausuarios.php">¿No tienes cuenta?</a>
     </form>
     <p>
-      <button type="button" class="carrito-btn" onclick="window.location.href='carrito.html'">
+      <button type="button" class="carrito-btn" onclick="window.location.href='carrito.php'">
         🛒 Carrito de compra
       </button>
     </p>
