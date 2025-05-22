@@ -7,8 +7,8 @@ $conexion = $db->getConexion();
 
 // Ejemplo de consulta
 try {
-    $stmt = $conexion->prepare("SELECT * FROM Productos WHERE Stock > :stock");
-    $stmt->execute(['stock' => 0]);
+    $stmt = $conexion->prepare("SELECT * FROM Clientes");
+    $stmt->execute();
     $productos = $stmt->fetchAll();
     
     foreach ($productos as $producto) {
