@@ -1,0 +1,212 @@
+Guía de Instalación para Equipo - Entorno de Desarrollo Web
+
+Aquí tienes las instrucciones completas para que tus compañeros configuren su entorno igual al tuyo:
+1. Instalar Apache, PHP y MySQL (LAMP Stack)
+bash
+
+# Actualizar sistema primero
+sudo apt update && sudo apt upgrade -y
+
+# Instalar componentes básicos
+sudo apt install -y apache2 mysql-server php libapache2-mod-php php-mysql
+
+# Instalar extensiones PHP comunes (recomendado)
+sudo apt install -y php-curl php-gd php-mbstring php-xml php-zip php-json
+
+2. Configurar MySQL/MariaDB
+bash
+
+# Ejecutar configuración segura
+sudo mysql_secure_installation
+
+# Cuando pregunte:
+# 1. Enter para contraseña root (o establecer una segura)
+# 2. Y para eliminar usuarios anónimos
+# 3. Y para deshabilitar login root remoto
+# 4. Y para eliminar bases de prueba
+# 5. Y para recargar privilegios
+
+3. Instalar phpMyAdmin
+bash
+
+sudo apt install -y phpmyadmin
+
+# Durante la instalación:
+# 1. Seleccionar apache2 (con espacio)
+# 2. Enter para configurar con dbconfig-common
+# 3. Establecer contraseña para phpmyadmin (o dejar en blanco para autogenerar)
+
+4. Configurar Acceso a phpMyAdmin
+bash
+
+# Habilitar acceso directo (opcional)
+sudo ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
+
+# Reiniciar Apache
+sudo systemctl restart apache2
+
+5. Verificar Instalaciones
+bash
+
+# Ver versión PHP
+php -v
+
+# Ver estado Apache
+sudo systemctl status apache2
+
+# Ver estado MySQL
+sudo systemctl status mysql
+
+6. Configurar Usuario MySQL para Desarrollo
+bash
+
+# Acceder a MySQL
+sudo mysql
+
+# Dentro de MySQL ejecutar:
+CREATE USER 'dev_user'@'localhost' IDENTIFIED BY 'password_segura';
+GRANT ALL PRIVILEGES ON *.* TO 'dev_user'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+EXIT;
+
+7. Importar la Base de Datos
+
+    Guardar el script SQL que te proporcioné como setup_tienda.sql
+
+    Ejecutar:
+
+bash
+
+mysql -u dev_user -p tienda_online < setup_tienda.sql
+
+8. Acceso a Herramientas
+
+    phpMyAdmin: http://localhost/phpmyadmin
+
+    Sitio local: http://localhost
+
+Configuraciones Adicionales Recomendadas
+
+    Habilitar mod_rewrite (para URLs amigables):
+
+bash
+
+sudo a2enmod rewrite
+sudo systemctl restart apache2
+
+    Ajustar memoria PHP (si es necesario):
+
+bash
+
+sudo nano /etc/php/8.1/apache2/php.ini
+
+Buscar y modificar:
+
+memory_limit = 256M
+upload_max_filesize = 64M
+post_max_size = 64M
+
+Solución de Problemas Comunes
+
+Si phpMyAdmin da error 404:
+bash
+
+sudo ln -s /usr/share/phpmyadmin /var/www/html/
+sudo systemctl restart apache2
+
+Si MySQL no inicia:
+bash
+
+sudo systemctl start mysql
+
+
+---------
+
+Configuración de public_html y enlace simbólico para proyectos
+1. Habilitar el directorio public_html para cada usuario
+bash
+
+# Activar el módulo userdir de Apache
+sudo a2enmod userdir
+
+# Crear directorio public_html en el home del usuario
+mkdir -p ~/public_html
+
+# Establecer permisos adecuados
+chmod 755 ~
+chmod 755 ~/public_html
+
+# Editar la configuración de Apache para userdir
+sudo nano /etc/apache2/mods-available/userdir.conf
+
+Dentro del archivo, asegúrate que tenga este contenido:
+apache
+
+<IfModule mod_userdir.c>
+    UserDir public_html
+    UserDir disabled root
+
+    <Directory /home/*/public_html>
+        AllowOverride All
+        Options MultiViews Indexes SymLinksIfOwnerMatch
+        Require all granted
+    </Directory>
+</IfModule>
+
+2. Reiniciar Apache para aplicar cambios
+bash
+
+sudo systemctl restart apache2
+
+3. Probar la configuración
+
+    Crea un archivo de prueba:
+
+bash
+
+echo "<h1>¡Funciona!</h1>" > ~/public_html/index.html
+
+    Accede desde el navegador a:
+
+http://localhost/~tu_usuario/
+
+4. Opción con enlace simbólico (si prefieren mantener el proyecto en otra ubicación)
+bash
+
+# Eliminar el directorio public_html si ya existe
+rm -rf ~/public_html
+
+# Crear enlace simbólico al directorio del proyecto
+ln -s /ruta/a/tu/proyecto ~/public_html
+
+# Establecer permisos (ajusta según tu estructura)
+find /ruta/a/tu/proyecto -type d -exec chmod 755 {} \;
+find /ruta/a/tu/proyecto -type f -exec chmod 644 {} \;
+
+5. Configuración adicional recomendada
+Permitir .htaccess en public_html:
+bash
+
+sudo nano /etc/apache2/apache2.conf
+
+Busca la sección <Directory /var/www/> y cambia:
+apache
+
+AllowOverride None
+
+por:
+apache
+
+AllowOverride All
+
+Solucionar posibles problemas de permisos:
+bash
+
+sudo usermod -a -G www-data $USER
+sudo chown -R $USER:www-data ~/public_html
+sudo chmod -R 775 ~/public_html
+
+Reiniciar Apache nuevamente:
+bash
+
+sudo systemctl restart apache2
