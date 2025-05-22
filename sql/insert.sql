@@ -16,7 +16,7 @@ INSERT INTO Clientes (Nombre, Apellidos, Correo, Telefono, Nacimiento, Contrasen
 -- -----------------------------------------------------
 --               Inserción de Productos
 -- -----------------------------------------------------
-INSERT INTO Productos (GTIN, Nombre, Stock, Precio_compra, Precio_venta, Categoria, ImagenURL) VALUES
+INSERT INTO Productos (GTIN, Nombre, Stock, Precio_Compra, Precio_Venta, Categoria, ImagenURL) VALUES
     ('7891234560123', 'Pack de cartas: Chispas Fulgurantes', 50, 2.50, 5.00, 'Boosters', 'imgs/chispas.jpg'),
     ('7891234560124', 'Pack de cartas: Silver Tempest', 45, 2.50, 5.00, 'Boosters', 'imgs/silvertempest.jpeg'),
     ('7891234560125', 'Charizard PSA 10', 1, 8000.00, 10000.00, 'Cartas Gradadas', 'imgs/charizard.jpeg'),

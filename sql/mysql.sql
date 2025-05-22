@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS Productos(
   GTIN VARCHAR(14) UNIQUE,
   Nombre VARCHAR(50) NOT NULL,
   Stock INT DEFAULT 0, 
-  Precio_compra DECIMAL(7, 2),
-  Precio_venta DECIMAL(7, 2) NOT NULL, 
+  Precio_Compra DECIMAL(7, 2),
+  Precio_Venta DECIMAL(7, 2) NOT NULL, 
   Categoria VARCHAR(20), 
   ImagenURL VARCHAR(255) NULL 
 ) ENGINE=InnoDB;
