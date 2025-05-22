@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'Database.php';
+require_once 'dbgestion/sqlDatabase.php';
 
 if(!isset($_SESSION['idCliente'])) {
     header('Location: login.php');
@@ -8,22 +8,15 @@ if(!isset($_SESSION['idCliente'])) {
 }
 
 $idCliente = $_SESSION['idCliente'];
-try {
+$conn = Database::getInstancia()->getConexion();
+
+// Obtener ID del carrito del cliente (único por cliente)
+$stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas WHERE ID_Cliente = ?");
+$stmt->execute([$idCliente]);
+$row = $stmt->fetch();
+$idCarrito = $row ? $row['ID_Carrito'] : null;
 
 
-    $conn = Database::getInstancia()->getConexion();
-
-    // Obtener el ID del carrito activo del cliente (uno por cliente)
-    $sql = 'SELECT ID_CARRITO FROM CARRITO_VENTAS WHERE ID_CLIENTE = :id_cliente';
-    $stid = oci_parse($conn, $sql);
-    oci_bind_by_name($stid, ":id_cliente", $idCliente);
-    oci_execute($stid);
-    $row = oci_fetch_assoc($stid);
-    $idCarrito = $row ? $row['ID_CARRITO'] : null;
-} catch (Exception $e) {
-    error_log("Fallo de conexion Oracle: " . $e->getMessage());
-    die("Error de conexion a la base de datos");
-}
 $total = 0;
 ?>
 
@@ -53,28 +46,28 @@ $total = 0;
                     <p>Tu carrito está vacío.</p>
                 <?php else: ?>
                     <?php
-                    $sqlDetalles = "SELECT * FROM Detalle_Carrito WHERE ID_Carrito = :id_carrito";
-                    $stidDetalles = oci_parse($conn, $sqlDetalles);
-                    oci_bind_by_name($stidDetalles, ":id_carrito", $idCarrito);
-                    oci_execute($stidDetalles);
-                    $hayProductos = false;
+                    $stmt = $conn->prepare("SELECT * FROM Detalle_Carrito WHERE ID_Carrito = ?");
+                    $stms->execute([$idCarrito]);
+                    $productos = $stmt->fetchAll();
+                    ?>
 
-                    while($detalle = oci_fetch_assoc($stidDetalles)):
-                        $hayProductos = true;
-                        $subtotal = $detalle['Precio'] * $detalle['Cantidad'];
-                        $total += $subtotal;
+                    <?php if (empty($productos)): ?>
+                        <p>TU carrito está vacío </p>
+                    <?php else: ?>
+                        <?php foreach ($productos as $detalle):
+                            $subtotal = $detalle['Precio'] * $detalle['Cantidad'];
+                            $total += $subtotal;
                         ?>
                         <div class="producto-carrito">
                             <div class="imagen-cont">
-                                <img src="imgs/<?=htmlspecialchars($detalle['GTIN']) ?>.jpeg" alt="<?=htmlspecialchars($detalle['NOMBRE_PRODUCTO'])?>">
-                            </div>
-
+                                <img src="imgs/<?=$detalle['GTIN'] ?>.jpeg" alt="<?=$detalle['Nombre_Producto']?>">
+                        </div>
                             <div class="info-carrito">
                                 <h3><?= htmlspecialchars($detalle['Nombre_Producto']) ?></h3>
                                 <p><?= htmlspecialchars($detalle['Categoria'])?></p>
                                 <p class="precio"><?= $detalle['Precio'] ?>€</p>
                                 <div class="cantidad-cont">
-                                    <form method="post" action="modificar_carrito.php" style="display: inline;">
+                                    <form method="post" action="modificar_carrito.php">
                                         <input type="hidden" name="id_producto" value="<?=$detalle['ID_Producto']?>">
                                         <input type="hidden" name="accion" value="restar">
                                         <button class="btn-cantidad">-</button>
@@ -93,17 +86,14 @@ $total = 0;
                                 </form>
                             </div>
                         </div>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
 
-                    <?php if (!$hayProductos): ?>
-                        <p> Tu carrito está vacío. </p>
-                    <?php else: ?>
-                        <div class="total-carrito">
-                            <p>Total: <span><?=number_format($total, 2) ?>€</span></p>
-                            <form action="finalizar_compra.php" method="post">
-                                <button class="btn-comprar">Finalizar compra</button>
-                            </form>
-                        </div>
+                    <div class="total-carrito">
+                        <p>Total: <span><?=number_format($total, 2) ?>€</span></p>
+                        <form action="finalizar_compra.php" method="post">
+                            <button class="btn-comprar">Finalizar compra</button>
+                        </form>
+                    </div>
                     <?php endif; ?>
                 <?php endif; ?>
             </div>

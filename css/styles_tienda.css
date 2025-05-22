@@ -20,6 +20,7 @@ body {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    width: 100%;
 }
 
 /* Logo y nombre */
@@ -27,6 +28,9 @@ body {
     display: flex;
     align-items: center;
     gap: 20px;
+    flex-grow: 1; /* Ocupa el espacio disponible */
+    justify-content: center; /* Centra el contenido */
+    margin-left: 150px; /* Mantiene tu margen izquierdo */
 }
 
 .logoynombre img {
@@ -36,77 +40,14 @@ body {
 }
 
 .logoynombre figcaption {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    position: static;
+    transform: none;
     font-size: 52px;
     font-weight: bold;
     white-space: nowrap;
     color: #f1f1f1; /* Color original */
 }
 
-/* Formulario de login */
-.login {
-    background: #e0d2d2;
-    border: 1px solid #e0e0e0;
-    width: 240px;
-    padding: 15px;
-    margin-left: auto;
-    margin-right: 50px;
-    font-size: 12px;
-    border-radius: 5px;
-
-}
-
-.login p {
-    margin: 0 0 6px 0;
-}
-
-.login label {
-    display: block;
-    margin-bottom: 2px;
-    color: #555;
-}
-
-.login input {
-    width: 100%;
-    padding: 4px 6px;
-    border: 1px solid #ddd;
-    border-radius: 2px;
-    box-sizing: border-box;
-    height: 24px;
-    font-size: 12px;
-}
-
-.login button {
-    width: 100%;
-    padding: 4px;
-    background-color: #df3232; /* Color original azul */
-    color: white;
-    border: none;
-    border-radius: 2px;
-    font-size: 12px;
-    height: 24px;
-    margin-top: 4px;
-    cursor: pointer;
-}
-
-.login button:hover {
-    background-color: #1a428f;
-}
-
-.link_alta {
-    display: block;
-    text-align: center;
-    margin-top: 6px;
-    color: #2353ac; /* Color original azul */
-    font-size: 11px;
-    text-decoration: none;
-}
-
-.link_alta:hover {
-    text-decoration: underline;
-}
 
 /* Galería de productos */
 #contenedor-actividades {
@@ -222,8 +163,17 @@ body {
     text-decoration: underline;
 }
 
-.carrito-btn {
-    background-color: #e0d2d2; /* rojo como tu fondo */
+/* CContenedor de botones */
+
+.botones-derecha {
+    display: flex;
+    gap: 10px;
+    margin-right: 50px;
+    align-items: center;
+}
+
+.login-btn, .carrito-btn {
+    background-color: #e0d2d2; 
     color: rgb(0, 0, 0);
     border: none;
     border-radius: 6px;
@@ -236,12 +186,14 @@ body {
     align-items: center;
     gap: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    white-space: nowrap;
 }
 
-.carrito-btn:hover {
+.login-btn:hover, .carrito-btn:hover {
     background-color: #b82929; /* un rojo más oscuro */
     transform: scale(1.05);
 }
+
 
 
 /* barra inferior */

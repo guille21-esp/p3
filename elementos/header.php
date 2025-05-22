@@ -4,25 +4,16 @@
       <img src="imgs/pokeball.gif" alt="Logo">
       <figcaption>Gotta Collect 'Em All</figcaption>
     </figure>
-    <form class="login">
-      <p>
-        <label for="usuario">Usuario</label><br />
-        <input type="text" id="usuario" name="usuario" required />
-      </p>
-      <p>
-        <label for="contrasena">Contraseña</label><br />
-        <input type="password" id="contrasena" name="contrasena" required />
-      </p>
-      <p>
-        <button type="submit">Entrar</button>
-      </p>
-      <a class= link_alta href="altausuarios.php">¿No tienes cuenta?</a>
-    </form>
-    <p>
+    <!-- No sé si queréis crear otra clase en css que sea login-btn -->
+    <div class="botones-derecha">
+      <button type="button" class="login-btn" onclick="window.location.href='login.php'">
+        Iniciar Sesión
+      </button>
+    
       <button type="button" class="carrito-btn" onclick="window.location.href='carrito.php'">
         🛒 Carrito de compra
       </button>
-    </p>
+    </div>
   </section>
 
   <div class="barra_inferior">
