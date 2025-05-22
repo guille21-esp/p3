@@ -1,11 +1,11 @@
 <?php
 session_start();
 require_once 'dbgestion/sqlDatabase.php';
-
-if(!isset($_SESSION['idCliente'])) {
-    header('Location: login.php');
-    exit;
-}
+echo "Tenemos el siguiente idCliente: " . $_SESSION['idCliente'];
+//if(!isset($_SESSION['idCliente'])) {
+//    header('Location: login.php');
+//    exit;
+//  }
 
 $idCliente = $_SESSION['idCliente'];
 $conn = Database::getInstancia()->getConexion();
@@ -37,13 +37,17 @@ $total = 0;
     <?php include 'elementos/header.php';?>
     <main>
         <div class="producto-layout">
-            <a href="catalogo.html" class="back-button">⬅ Volver a la tienda</a>
+            <a href="catalogo.php" class="back-button">⬅ Volver a la tienda</a>
 
             <div class="contenedor">
                 <h1>Productos en el carrito</h1>
 
                 <?php if (!$idCarrito): ?>
                     <p>Tu carrito está vacío.</p>
+                    <?php
+                    header("Location: modificar_carrito.php");
+                    exit();
+                ?>
                 <?php else: ?>
                     <?php
                     $stmt = $conn->prepare("SELECT * FROM Detalle_Carrito WHERE ID_Carrito = ?");
