@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS Carrito_Ventas (
   ID_Carrito INT AUTO_INCREMENT PRIMARY KEY,
   ID_Cliente INT NULL,
   Cantidad_Productos INT DEFAULT 0,
-  Total DECIMAL(6, 2) DEFAULT 0.00,
+  Total DECIMAL(10, 2) DEFAULT 0.00,
   CONSTRAINT FK_Carrito_Cliente FOREIGN KEY (ID_Cliente) 
     REFERENCES Clientes(ID_Cliente) ON DELETE SET NULL
 ) ENGINE=InnoDB;
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS Detalle_Carrito (
   Nombre_Producto VARCHAR(50),
   Categoria VARCHAR(40),
   GTIN VARCHAR(14),
-  Precio DECIMAL(5, 2) NOT NULL, 
+  Precio DECIMAL(10, 2) NOT NULL, 
   Cantidad INT DEFAULT 1 NOT NULL,
   PRIMARY KEY (ID_Carrito, ID_Producto), 
   CONSTRAINT FK_Detalle_Carrito_CV FOREIGN KEY (ID_Carrito) 
