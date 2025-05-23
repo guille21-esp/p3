@@ -52,6 +52,12 @@
     color: red;
 }
 
+.usuario {
+    color: white;
+    margin-right: 10px;
+    font-size: 0.9em;
+}
+
 .link_alta {
     display: block;
     text-align: center;

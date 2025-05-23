@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'dbgestion/sqlDatabase.php';
 $conn = Database::getInstancia()->getConexion();
 

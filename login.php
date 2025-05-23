@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($cliente){
             if ($clave === $cliente['Contrasena']){
                 $_SESSION['idCliente'] = $cliente['ID_Cliente'];
-                header('Location: carrito.php');
+                header('Location: catalogo.php');
             } else {
                 $errores = "Contrasena incorrecta.";
             } 
