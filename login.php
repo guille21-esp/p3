@@ -1,47 +1,48 @@
 <?php
+// 1. Inicio de sesión SIEMPRE TIENE QUE IR AL PRINCIPIO DEL PHP
 session_start();
+
+// 2. Incluir dependencias
 require_once 'dbgestion/sqlDatabase.php';
+
+// Añado una opción para debuggear la página y ver errores:
+
 
 $errores = "";
 
-echo "<pre>";
-print_r($cliente);
-echo "</pre>";
-
+// 3. Lógica PHP 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $correo = $_POST['correo'] ?? '';
+    $correo = trim($_POST['correo'] ?? '');
     $clave = $_POST['clave'] ?? '';
 
-    echo "<p> $correo y $clave </p>";
+
     if ($correo && $clave) {
         $conn = Database::getInstancia()->getConexion();
+
 
         $stmt = $conn->prepare("SELECT ID_Cliente, Correo, Contrasena FROM Clientes WHERE Correo = ?");
         $stmt->execute([$correo]);
         $cliente = $stmt->fetch();
 
-
-        echo "Correo introducido: [$correo]";
-
-//       if ($cliente && password_verify($clave, $cliente['Contrasena'])) {
+//      if ($cliente && password_verify($clave, $cliente['Contrasena'])) {
 //      El if de arriba se usará cuando se guarden las contraseñas hasheadas
 //      que todavía no está implementado el crear sesión como tal
-        if ($cliente && $clave === $cliente['Contrasena']){
-            $_SESSION['idCliente'] = $cliente['ID_Cliente'];
-            header('Location: carrito.php');
-            exit;
+        
+        if ($cliente){
+            if ($clave === $cliente['Contrasena']){
+                $_SESSION['idCliente'] = $cliente['ID_Cliente'];
+                header('Location: carrito.php');
+            } else {
+                $errores = "Contrasena incorrecta.";
+            } 
         } else {
-            if($correo != $cliente['Correo'])
-                $errores .= "El email es incorrecto.";
-            else if($clave != $cliente['contrasena'])
-                $errores .= "La contrasena es incorrecto.";
-
-            $errores .= "Correo o contraseña incorrectos.";
+            $errores = "No existe un cliente con ese correo";
         }
     } else {
         $errores .= "Completa todos los campos.";
     }
 }
+// 4. HTML (después de toda la lógica que pueda redirigir)
 ?>
 
 <!DOCTYPE html>
@@ -54,20 +55,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <?php include 'elementos/header.php';?>
-    <form class="login" method="POST" action="login.php">
-      <p>
-        <label for="correo">Usuario</label><br />
-        <input type="text" id="usuario" name="correo" required />
-      </p>
-      <p>
-        <label for="clave">Contraseña</label><br />
-        <input type="password" id="contrasena" name="clave" required />
-      </p>
-      <p>
-        <button type="submit">Entrar</button>
-      </p>
-      <a class= link_alta href="altausuarios.php">¿No tienes cuenta?</a>
-    </form>
+    <main>
+        <form class="login" method="POST" action="login.php" autocomplete="off" novalidate>
+            <h2>Iniciar Sesión</h2>
+            <?php if(!empty($errores)): ?>
+                <p class="error"><?=$errores?></p>
+            <?php endif; ?>
+            <p>
+                <label for="correo">Usuario</label><br />
+                <input type="text" id="usuario" name="correo" required autocomplete="off"/>
+            </p>
+            <p>
+                <label for="clave">Contraseña</label><br />
+                <input type="password" id="contrasena" name="clave" required autocomplete="off"/>
+            </p>
+            <p>
+                <button type="submit">Entrar</button>
+            </p>
+            <a class= link_alta href="altausuarios.php">¿No tienes cuenta?</a>
+        </form>
+    </main>
     <?php include 'elementos/footer.php'?>
 </body>
 </html>

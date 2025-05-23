@@ -1,11 +1,12 @@
 <?php
 session_start();
+
 require_once 'dbgestion/sqlDatabase.php';
-echo "Tenemos el siguiente idCliente: " . $_SESSION['idCliente'];
-//if(!isset($_SESSION['idCliente'])) {
-//    header('Location: login.php');
-//    exit;
-//  }
+
+if(!isset($_SESSION['idCliente'])) {
+    header('Location: login.php');
+    exit;
+  }
 
 $idCliente = $_SESSION['idCliente'];
 $conn = Database::getInstancia()->getConexion();
@@ -16,6 +17,12 @@ $stmt->execute([$idCliente]);
 $row = $stmt->fetch();
 $idCarrito = $row ? $row['ID_Carrito'] : null;
 
+if(!$idCarrito) {
+    // Crear un carrito si no existe
+    $stmt = $conn->prepare("INSERT INTO Carrito_Ventas (ID_Cliente) VALUES (?)");
+    $stmt->execute([$idCliente]);
+    $idCarrito = $conn->lastInsertId();
+}
 
 $total = 0;
 ?>
@@ -43,15 +50,13 @@ $total = 0;
                 <h1>Productos en el carrito</h1>
 
                 <?php if (!$idCarrito): ?>
-                    <p>Tu carrito está vacío.</p>
-                    <?php
-                    header("Location: modificar_carrito.php");
-                    exit();
-                ?>
+                    <p>
+                        Oh no! El carrito está vacío :/
+                    </p>
                 <?php else: ?>
                     <?php
                     $stmt = $conn->prepare("SELECT * FROM Detalle_Carrito WHERE ID_Carrito = ?");
-                    $stms->execute([$idCarrito]);
+                    $stmt->execute([$idCarrito]);
                     $productos = $stmt->fetchAll();
                     ?>
 

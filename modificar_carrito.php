@@ -1,8 +1,9 @@
 <?php
 session_start();
+
 require_once 'dbgestion/sqlDatabase.php';
 
-if(isset($_SESSION['idCliente'])){
+if(!isset($_SESSION['idCliente'])){
     header('Location: login.php');
     exit;
 }

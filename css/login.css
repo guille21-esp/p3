@@ -48,6 +48,10 @@
     background-color: #1a428f;
 }
 
+.error {
+    color: red;
+}
+
 .link_alta {
     display: block;
     text-align: center;
