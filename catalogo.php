@@ -12,89 +12,72 @@
 <body>
     <?php include 'elementos/header.php'; ?>
     <main id="contenedor-actividades">
-        
+
+
+
+
+    <?php
+require_once 'dbgestion/sqlDatabase.php';
+$conn = Database::getInstancia()->getConexion();
+
+$productos = [];
+
+if (!empty($_GET['categorias'])) {
+    $categoriasSeleccionadas = $_GET['categorias'];
+
+    // Seguridad: aseguramos que sean strings
+    $categoriasSeleccionadas = array_map('strval', $categoriasSeleccionadas);
+
+    // Creamos los placeholders ?,?,? según cuántas categorías haya
+    $placeholders = implode(',', array_fill(0, count($categoriasSeleccionadas), '?'));
+    $sql = "SELECT * FROM Productos WHERE Categoria IN ($placeholders)";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute($categoriasSeleccionadas);
+} else {
+    $sql = "SELECT * FROM Productos";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+}
+
+// Recogemos todos los productos
+$productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+
+
+
+
+
+
+
+
+        <form method="GET" action="catalogo.php">
+            <label><input type="checkbox" name="categorias[]" value="Boosters" <?= in_array("Boosters", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Boosters</label>
+            <label><input type="checkbox" name="categorias[]" value="Cartas Gradadas" <?= in_array("Cartas Gradadas", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Cartas Gradadas</label>
+            <label><input type="checkbox" name="categorias[]" value="Lotes" <?= in_array("Lotes", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Lotes</label>
+            <label><input type="checkbox" name="categorias[]" value="Accesorios" <?= in_array("Accesorios", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Accesorios</label>
+            <button type="submit">Filtrar</button>
+        </form>
+
         <section id="galeria-actividades">
-            <a href="pagina_producto.php" class="actividad">
+    <?php if (empty($productos)): ?>
+        <p>No hay productos para mostrar.</p>
+    <?php else: ?>
+        <?php foreach ($productos as $producto): ?>
+            <a href="pagina_producto.php?gtin=<?= $producto['GTIN'] ?>" class="actividad">
                 <div class="imagen-container">
-                     <img src="imgs/chispas.jpg" alt="chispas">
+                    <img src="<?= htmlspecialchars($producto['ImagenURL']) ?>" alt="<?= htmlspecialchars($producto['Nombre']) ?>">
                 </div>
-                
-                <h3>Pack de cartas: chispas fulgurantes</h3>
-                <p>10 cartas de juego</p>
-                <p>5€</p>
+                <h3><?= htmlspecialchars($producto['Nombre']) ?></h3>
+                <p>Categoría: <?= htmlspecialchars($producto['Categoria']) ?></p>
+                <p><?= htmlspecialchars($producto['Precio_Venta']) ?>€</p>
             </a>
-            <a href="pagina_producto.php" class="actividad">
-                <div class="imagen-container">
-                     <img src="imgs/silvertempest.jpeg" alt="silver">
-                </div>
-                
-                <h3>Pack de cartas: silver tempest</h3>
-                <p>10 cartas de juego</p>
-                <p>5€</p>
-            </a>
-            <a href="pagina_producto.php" class="actividad">
-                <div class="imagen-container">
-                     <img src="imgs/charizard.jpeg" alt="charizard">
-                </div>
-                
-                <h3>Charizard PS10</h3>
-                <p>Carta individual Charizard</p>
-                <p>100.000€</p>
-            </a>
-            <a href="pagina_producto.php" class="actividad">
-                <div class="imagen-container">
-                     <img src="imgs/brechaparadojica.jpeg" alt="brecha">
-                </div>
-                
-                <h3>Lote de sobres: brecha paradojica</h3>
-                <p>6 sobres de cartas</p>
-                <p>30€</p>
-            </a>
-            <a href="pagina_producto.php" class="actividad">
-                <div class="imagen-container">
-                     <img src="imgs/lotecharizard.jpeg" alt="lote">
-                </div>
-                
-                <h3>Lote de paquetes: charizard</h3>
-                <p>6 sobres de sobres: giga charizard</p>
-                <p>30€</p>
-            </a>
-            <a href="pagina_producto.php" class="actividad">
-                <div class="imagen-container">
-                     <img src="imgs/journeytogether.jpeg" alt="journey">
-                 </div>
-                <h3>Sobre de cartas: journey together</h3>
-                <p>10 cartas de juego</p>
-                <p>5€</p>
-            </a>
-            <a href="pagina_producto.php" class="actividad">
-                <div class="imagen-container">
-                     <img src="imgs/fundas.jpeg" alt="fundas">
-                </div>
-                
-                <h3>Fundas para cartas</h3>
-                <p>Fundas protectoras para cartas individuales</p>
-                <p>1€</p>
-            </a>
-            <a href="pagina_producto.php" class="actividad">
-                <div class="imagen-container">
-                     <img src="imgs/estuche.jpeg" alt="estuche">
-                </div>
-                
-                <h3>Estuchera metalica para cartas</h3>
-                <p>Estuche protector para tu baraja</p>
-                <p>3€</p>
-            </a>
-            <a href="pagina_producto.php" class="actividad">
-                <div class="imagen-container">
-                     <img src="imgs/pikachu.jpeg" alt="pikachu">
-                </div>
-                
-                <h3>Pikachu PSA10</h3>
-                <p>Carta individual pikachu</p>
-                <p>80.000€</p>
-            </a>  
-        </section>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</section>
+
+
+        
     </main>
     <?php include 'elementos/footer.php'; ?>
 </body>
