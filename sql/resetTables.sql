@@ -29,7 +29,7 @@ CREATE TABLE Productos(
   Rarezas VARCHAR(255) NULL,
   Stock INT DEFAULT 0, 
   Precio_Compra DECIMAL(7, 2),
-  Precio_Venta DECIMAL(7, 2) NOT NULL, 
+  Precio_Venta DECIMAL(10, 2) NOT NULL, 
   Categoria VARCHAR(20), 
   ImagenURL VARCHAR(255) NULL 
 ) ENGINE=InnoDB;
