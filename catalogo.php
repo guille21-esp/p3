@@ -1,22 +1,4 @@
-
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpg" href="imgs/pokeball.gif"/>
-    <title>Gotta Collect 'Em All</title>
-    <link rel="stylesheet" href="css/styles_tienda.css">
-</head>
-<body>
-    <?php include 'elementos/header.php'; ?>
-    <main id="contenedor-actividades">
-
-
-
-
-    <?php
+<?php
 require_once 'dbgestion/sqlDatabase.php';
 $conn = Database::getInstancia()->getConexion();
 
@@ -43,14 +25,18 @@ if (!empty($_GET['categorias'])) {
 $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-
-
-
-
-
-
-
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpg" href="imgs/pokeball.gif"/>
+    <title>Gotta Collect 'Em All</title>
+    <link rel="stylesheet" href="css/styles_tienda.css">
+</head>
+<body>
+    <?php include 'elementos/header.php'; ?>
+    <main id="contenedor-actividades">
         <form method="GET" action="catalogo.php">
             <label><input type="checkbox" name="categorias[]" value="Boosters" <?= in_array("Boosters", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Boosters</label>
             <label><input type="checkbox" name="categorias[]" value="Cartas Gradadas" <?= in_array("Cartas Gradadas", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Cartas Gradadas</label>

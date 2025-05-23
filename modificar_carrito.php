@@ -12,8 +12,11 @@ $idCliente = $_SESSION['idCliente'];
 $idProducto = $_POST['idProducto'] ?? null;
 $accion = $_POST['accion'] ?? null;
 
-if(!$idProducto || !$accion) {
-    header('Location: carrito.php');
+// esta puesto así para que se pueda recibir el formulario desde
+// finalizar_compra.php y se utilice el vaciar carrito del switch
+// para la reutilización de código
+if(!$accion || ($accion !== 'vaciar' && !$idProducto)) {
+    header('Location: catalogo.php');
     exit;
 }
 
@@ -25,7 +28,7 @@ $stmt->execute([$idCliente]);
 $carrito = $stmt->fetch();
 
 // 2. Creo el carrito si no existe
-if (!$idCarrito) {
+if (!$carrito) {
     $stmt = $conn->prepare("INSERT INTO Carrito_Ventas (ID_Cliente) VALUES (?)");
     $stmt->execute([$idCliente]);
     $idCarrito = $conn->lastInsertId();
@@ -39,19 +42,19 @@ $stmt->execute([$idProducto]);
 $producto = $stmt->fetch();
 
 if (!$producto) {
-    header('Location: carrito.php');
+    header('Location: catalogo.php');
     exit;
 }
 
-$precio = $producto['PRECIO_VENTA'];
+$precio = $producto['Precio_Venta'];
 
 switch ($accion) {
     case 'sumar':
         $stmt = $conn->prepare("SELECT Cantidad FROM Detalle_Carrito WHERE ID_Carrito = ? AND ID_Producto = ?");
         $stmt->execute([$idCarrito, $idProducto]);
-        $existe = $stmt->fetch();
+        $detalle = $stmt->fetch();
 
-        if ($existe) {
+        if ($detalle) {
             // Ya existe: actualizar cantidad
             $stmt = $conn->prepare("UPDATE Detalle_Carrito SET Cantidad = Cantidad + 1 WHERE ID_Carrito = ? AND ID_Producto = ?");
             $stmt->execute([$idCarrito, $idProducto]);
@@ -81,10 +84,16 @@ switch ($accion) {
         $stmt->execute([$idCarrito, $idProducto]);
         break;
 
-    // No estoy seguro que el default sea totalmente necesario
-    default:
-        header('Location: carrito.php');
-        exit;
+    case 'vaciar':
+        //Vaciar carrito, es decir, eliminar cada Detalle_Carrito s(sin eliminar el registro del carrito en sí)
+        $stmt = $conn->prepare("DELETE FROM Detalle_Carrito WHERE ID_Carrito = ?");
+        $stmt->execute([$idCarrito]);
+
+        // Resetear los totales del carrito también
+        $stmt = $conn->prepare("UPDATE Carrito_Ventas SET Total = 0, Cantidad_Productos = 0 WHERE ID_Carrito = ?");
+        $stmt->execute([$idCarrito]);
+        echo "Su carrito se vacío con éxito. ";
+        break;
 }
 
 header('Location: carrito.php');

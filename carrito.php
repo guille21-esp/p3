@@ -77,19 +77,19 @@ $total = 0;
                                 <p class="precio"><?= $detalle['Precio'] ?>€</p>
                                 <div class="cantidad-cont">
                                     <form method="post" action="modificar_carrito.php">
-                                        <input type="hidden" name="id_producto" value="<?=$detalle['ID_Producto']?>">
+                                        <input type="hidden" name="idProducto" value="<?=$detalle['ID_Producto']?>">
                                         <input type="hidden" name="accion" value="restar">
                                         <button class="btn-cantidad">-</button>
                                     </form>
                                     <span class="cantidad"><?= $detalle['Cantidad'] ?> </span>
                                     <form method="post" action="modificar_carrito.php" style="display: inline;">
-                                        <input type="hidden" name="id_producto" value="<?= $detalle['ID_Producto'] ?>">
+                                        <input type="hidden" name="idProducto" value="<?= $detalle['ID_Producto'] ?>">
                                         <input type="hidden" name="accion" value="sumar">
                                         <button class="btn-cantidad">+</button>
                                     </form>
                                 </div>
                                 <form method="post" action="modificar_carrito.php">
-                                    <input type="hidden" name="id_producto" value="<?= $detalle['ID_Producto'] ?>">
+                                    <input type="hidden" name="idProducto" value="<?= $detalle['ID_Producto'] ?>">
                                     <input type="hidden" name="accion" value="eliminar">
                                     <button class="btn-cantidad">Eliminar</button>
                                 </form>
