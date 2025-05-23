@@ -12,6 +12,7 @@ INSERT INTO Clientes (Nombre, Apellidos, Correo, Telefono, Nacimiento, Contrasen
     ('Ana', 'Rodríguez Fernández', 'ana.rodriguez@email.com', '600333444', '1982-11-30', '$2y$10$ejemploHashSeguro', 'Plaza Mayor 12, Valencia', 'Ana Rodríguez CB', '11223344C'),
     ('Carlos', 'Pérez Gómez', 'carlos.perez@email.com', '600444555', '1995-05-10', '$2y$10$ejemploHashSeguro', 'Calle Sol 67, Sevilla', NULL, '55667788D'),
     ('Laura', 'Sánchez Ruiz', 'laura.sanchez@email.com', '600555666', '1988-09-18', '$2y$10$ejemploHashSeguro', 'Paseo Marítimo 89, Málaga', 'Laura Sánchez e Hijos', '99887766E');
+    ('prueba', 'prueba', 'prueba@gmail.com', '600111222', '1988-09-18', 'pwd', 'Paseo Marítimo 89, Málaga', 'Pruebas y Pruebas SL', '99667766E');
 
 -- -----------------------------------------------------
 --               Inserción de Productos
