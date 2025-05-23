@@ -16,16 +16,17 @@ INSERT INTO Clientes (Nombre, Apellidos, Correo, Telefono, Nacimiento, Contrasen
 -- -----------------------------------------------------
 --               Inserción de Productos
 -- -----------------------------------------------------
-INSERT INTO Productos (GTIN, Nombre, Stock, Precio_Compra, Precio_Venta, Categoria, ImagenURL) VALUES
-    ('7891234560123', 'Pack de cartas: Chispas Fulgurantes', 50, 2.50, 5.00, 'Boosters', 'imgs/chispas.jpg'),
-    ('7891234560124', 'Pack de cartas: Silver Tempest', 45, 2.50, 5.00, 'Boosters', 'imgs/silvertempest.jpeg'),
-    ('7891234560125', 'Charizard PSA 10', 1, 8000.00, 10000.00, 'Cartas Gradadas', 'imgs/charizard.jpeg'),
-    ('7891234560126', 'Lote de sobres: Brecha Paradójica', 30, 15.00, 30.00, 'Lotes', 'imgs/brechaparadojica.jpeg'),
-    ('7891234560127', 'Lote de paquetes: Charizard', 25, 15.00, 30.00, 'Lotes', 'imgs/lotecharizard.jpeg'),
-    ('7891234560128', 'Sobre de cartas: Journey Together', 40, 2.50, 5.00, 'Boosters', 'imgs/journeytogether.jpeg'),
-    ('7891234560129', 'Fundas para cartas (x100)', 200, 0.50, 1.00, 'Accesorios', 'imgs/fundas.jpeg'),
-    ('7891234560130', 'Estuche metálico para cartas', 35, 1.50, 3.00, 'Accesorios', 'imgs/estuche.jpeg'),
-    ('7891234560131', 'Pikachu PSA 10', 1, 60000.00, 80000.00, 'Cartas Gradadas', 'imgs/pikachu.jpeg');
+INSERT INTO Productos (GTIN, Nombre, Contenido, Edicion, Rarezas, Stock, Precio_Compra, Precio_Venta, Categoria, ImagenURL) VALUES
+    ('7891234560123', 'Pack de cartas: Chispas Fulgurantes', '10 cartas de juego', 'Pokémon Escarlata y Púrpura', 'Incluye posibilidad de cartas holográficas', 50, 2.50, 5.00, 'Boosters', 'imgs/chispas.jpg'),
+    ('7891234560124', 'Pack de cartas: Silver Tempest', '10 cartas de juego', 'Espada y Escudo', '1 carta holográfica garantizada', 45, 2.50, 5.00, 'Boosters', 'imgs/silvertempest.jpeg'),
+    ('7891234560125', 'Charizard PSA 10', '1 carta gradada', 'Base Set', 'Holográfica First Edition', 1, 8000.00, 10000.00, 'Cartas Gradadas', 'imgs/charizard.jpeg'),
+    ('7891234560126', 'Lote de sobres: Brecha Paradójica', '36 sobres sellados', 'Espada y Escudo', NULL, 30, 15.00, 30.00, 'Lotes', 'imgs/brechaparadojica.jpeg'),
+    ('7891234560127', 'Lote de paquetes: Charizard', '24 sobres sellados', 'Evoluciones', 'Posibilidad de Charizard holográfico', 25, 15.00, 30.00, 'Lotes', 'imgs/lotecharizard.jpeg'),
+    ('7891234560128', 'Sobre de cartas: Journey Together', '5 cartas de juego', 'Sol y Luna', NULL, 40, 2.50, 5.00, 'Boosters', 'imgs/journeytogether.jpeg'),
+    ('7891234560129', 'Fundas para cartas (x100)', NULL, NULL, NULL, 200, 0.50, 1.00, 'Accesorios', 'imgs/fundas.jpeg'),
+    ('7891234560130', 'Estuche metálico para cartas', NULL, NULL, NULL, 35, 1.50, 3.00, 'Accesorios', 'imgs/estuche.jpeg'),
+    ('7891234560131', 'Pikachu PSA 10', '1 carta gradada', 'Base Set 1ª Edición', 'Holográfica Gem Mint', 1, 60000.00, 80000.00, 'Cartas Gradadas', 'imgs/pikachu.jpeg');
+
 -- -----------------------------------------------------
 --               Mensaje de Confirmación
 -- -----------------------------------------------------

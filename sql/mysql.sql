@@ -12,10 +12,13 @@ USE tienda_online;
 -- -----------------------------------------------------
 --                  Tabla Productos
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS Productos(
+CREATE TABLE Productos(
   ID_Producto INT AUTO_INCREMENT PRIMARY KEY, 
   GTIN VARCHAR(14) UNIQUE,
   Nombre VARCHAR(50) NOT NULL,
+  Contenido VARCHAR(255) NULL,
+  Edicion VARCHAR(255) NULL,
+  Rarezas VARCHAR(255) NULL,
   Stock INT DEFAULT 0, 
   Precio_Compra DECIMAL(7, 2),
   Precio_Venta DECIMAL(7, 2) NOT NULL, 
