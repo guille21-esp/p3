@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare("SELECT ID_Cliente, Correo, Contrasena FROM Clientes WHERE Correo = ?");
         $stmt->execute([$correo]);
         $cliente = $stmt->fetch();
-
+        
 //      if ($cliente && password_verify($clave, $cliente['Contrasena'])) {
 //      El if de arriba se usará cuando se guarden las contraseñas hasheadas
 //      que todavía no está implementado el crear sesión como tal

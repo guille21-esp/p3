@@ -15,7 +15,7 @@ if($gtin) {
 
 if(!$producto) {
     // Producto no encontrado
-    header('Location: catalogo.php?error=producto-no-encontrado');
+    header('Location: catalogo.php');
     exit;
 }
 ?>
