@@ -74,7 +74,7 @@ body {
     overflow: hidden;
     transition: transform 0.2s;
     position: relative;
-    height: 320px; /* Altura total del bloque */
+    height: 350px; /* Altura total del bloque */
 }
 .actividad:hover {
     transform: translateY(-3px);
@@ -238,3 +238,47 @@ body {
   display: flex;
   justify-content: center;
 }
+
+
+/*filtros*/
+
+
+div.filtro {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+
+div.filtro > form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+div.filtro form input[type="text"] {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+div.filtro form input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0,123,255,0.25);
+}
+
+
+div.filtro .checkbox-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin

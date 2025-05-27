@@ -2,8 +2,8 @@
 // Configuración para MySQL local
 define('DBHOST', 'localhost');
 define('DBNAME', 'tienda_online');
-define('DBUSER', 'sie');
-define('DBPWD',  'siepwd');
+define('DBUSER', 'userguille');
+define('DBPWD',  'Userguille123!');
 
 /* El usuario lo tenéis que crear en mysql con esa contrasena y 
 darle privilegios en la base de datos para que deje conectarse y crear tablas:

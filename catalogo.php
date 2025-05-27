@@ -15,49 +15,67 @@
 
 
 
-
     <?php
 require_once 'dbgestion/sqlDatabase.php';
 $conn = Database::getInstancia()->getConexion();
 
 $productos = [];
+$conditions = [];
+$params = [];
 
-if (!empty($_GET['categorias'])) {
-    $categoriasSeleccionadas = $_GET['categorias'];
 
-    // Seguridad: aseguramos que sean strings
-    $categoriasSeleccionadas = array_map('strval', $categoriasSeleccionadas);
-
-    // Creamos los placeholders ?,?,? según cuántas categorías haya
-    $placeholders = implode(',', array_fill(0, count($categoriasSeleccionadas), '?'));
-    $sql = "SELECT * FROM Productos WHERE Categoria IN ($placeholders)";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute($categoriasSeleccionadas);
-} else {
-    $sql = "SELECT * FROM Productos";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
+if (!empty($_GET['busqueda'])) {
+    $busqueda = trim($_GET['busqueda']);
+    $conditions[] = "Nombre LIKE ?";
+    $params[] = '%' . $busqueda . '%';
 }
 
-// Recogemos todos los productos
+
+if (!empty($_GET['categorias'])) {
+    $categoriasSeleccionadas = array_map('strval', $_GET['categorias']);
+    $placeholders = implode(',', array_fill(0, count($categoriasSeleccionadas), '?'));
+    $conditions[] = "Categoria IN ($placeholders)";
+    $params = array_merge($params, $categoriasSeleccionadas);
+}
+
+
+$sql = "SELECT * FROM Productos";
+if (!empty($conditions)) {
+    $sql .= " WHERE " . implode(' AND ', $conditions);
+}
+
+$stmt = $conn->prepare($sql);
+$stmt->execute($params);
 $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+   
 
 
 
+<div class="filtro">
+
+      
+<form method="GET" action="catalogo.php">
+  
+    <input type="text" 
+           name="busqueda" 
+           placeholder="Buscar productos..."
+           value="<?= htmlspecialchars($_GET['busqueda'] ?? '') ?>">
+    
+    <div class="checkbox-container">
+   
+    <label><input type="checkbox" name="categorias[]" value="Boosters" <?= in_array("Boosters", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Boosters</label>
+    <label><input type="checkbox" name="categorias[]" value="Cartas Gradadas" <?= in_array("Cartas Gradadas", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Cartas Gradadas</label>
+    <label><input type="checkbox" name="categorias[]" value="Lotes" <?= in_array("Lotes", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Lotes</label>
+    <label><input type="checkbox" name="categorias[]" value="Accesorios" <?= in_array("Accesorios", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Accesorios</label>
+    </div>
 
 
-
-
-
-
-        <form method="GET" action="catalogo.php">
-            <label><input type="checkbox" name="categorias[]" value="Boosters" <?= in_array("Boosters", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Boosters</label>
-            <label><input type="checkbox" name="categorias[]" value="Cartas Gradadas" <?= in_array("Cartas Gradadas", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Cartas Gradadas</label>
-            <label><input type="checkbox" name="categorias[]" value="Lotes" <?= in_array("Lotes", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Lotes</label>
-            <label><input type="checkbox" name="categorias[]" value="Accesorios" <?= in_array("Accesorios", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Accesorios</label>
-            <button type="submit">Filtrar</button>
-        </form>
+    <div class="button-container">
+    <button type="submit">Filtrar</button>
+    <a href="catalogo.php">Limpiar filtros</a>
+</form>
+</div>
 
         <section id="galeria-actividades">
     <?php if (empty($productos)): ?>
