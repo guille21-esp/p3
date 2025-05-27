@@ -1,16 +1,9 @@
 <?php
-// 1. Inicio de sesión SIEMPRE TIENE QUE IR AL PRINCIPIO DEL PHP
 session_start();
-
-// 2. Incluir dependencias
 require_once 'dbgestion/sqlDatabase.php';
 
-// Añado una opción para debuggear la página y ver errores:
-
-
 $errores = "";
-
-// 3. Lógica PHP 
+ 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $correo = trim($_POST['correo'] ?? '');
     $clave = $_POST['clave'] ?? '';
@@ -31,7 +24,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($cliente){
             if ($clave === $cliente['Contrasena']){
                 $_SESSION['idCliente'] = $cliente['ID_Cliente'];
-                header('Location: catalogo.php');
+                $idCliente = $cliente['ID_Cliente'];
+
+                // Fusión de carrito temporal si existe
+                if(isset($_COOKIE['cart_token'])) {
+                    $temporalToken = $_COOKIE['cart_token'];
+
+                    // 1. Obtener el carrito temporal
+                    $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas WHERE Temporal_Token = ? AND Fecha_Expiracion > NOW()");
+                    $stmt->execute([$temporalToken]);
+                    $tempCart = $stmt->fetch();
+
+                    if ($tempCart) {
+                        $idTempCarrito = $tempCart['ID_Carrito'];
+
+                        // 2. Obtener el carrito del cliente (si ya existía)
+                        $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas WHERE ID_Cliente = ?");
+                        $stmt->execute([$idCliente]);
+                        $existingCart = $stmt->fetch();
+
+                        if ($existingCart) {
+                            $idClienteCarrito = $existingCart['ID_Carrito'];
+
+                            // 3. Fusionar los productos
+                            // Por cada producto temporal, sumar o insertar en el carrito real
+                            $stmt = $conn->prepare("SELECT * FROM Detalle_Carrito WHERE ID_Carrito = ?");
+                            $stmt->execute([$idTempCarrito]);
+                            $productosTemporales = $stmt->fetchAll();
+
+                            foreach ($productosTemporales as $producto) {
+                                $stmt = $conn->prepare("SELECT * FROM Detalle_Carrito WHERE ID_Carrito = ? AND ID_Producto = ?");
+                                $stmt->execute([$idClienteCarrito, $producto['ID_Producto']]);
+                                $existe = $stmt->fetch();
+
+                                if ($existe) {
+                                    $stmt = $conn->prepare("UPDATE Detalle_Carrito SET Cantidad = Cantidad + ? WHERE ID_Carrito = ? AND ID_Producto = ?");
+                                    $stmt->execute([$producto['Cantidad'], $idClienteCarrito, $producto['ID_Producto']]);
+                                } else {
+                                    $stmt = $conn->prepare("INSERT INTO Detalle_Carrito (ID_Carrito, ID_Producto, Nombre_Producto, Categoria, GTIN, Precio, Cantidad)
+                                                            VALUES (?, ?, ?, ?, ?, ?, ?)");
+                                    $stmt->execute([
+                                        $idClienteCarrito,
+                                        $producto['ID_Producto'],
+                                        $producto['Nombre_Producto'],
+                                        $producto['Categoria'],
+                                        $producto['GTIN'],
+                                        $producto['Precio'],
+                                        $producto['Cantidad']
+                                    ]);
+                                }
+                            }
+
+                            // 4. Borrar el carrito temporal
+                            $stmt = $conn->prepare("DELETE FROM Carrito_Ventas WHERE ID_Carrito = ?");
+                            $stmt->execute([$idTempCarrito]);
+
+                        } else {
+                            // 5. Si no había carrito cliente, simplemente asignar el temporal al cliente
+                            $stmt = $conn->prepare("UPDATE Carrito_Ventas SET ID_Cliente = ?, Temporal_Token = NULL, Fecha_Expiracion = NULL WHERE ID_Carrito = ?");
+                            $stmt->execute([$idCliente, $idTempCarrito]);
+                        }
+
+                        // 6. Eliminar cookie
+                        setcookie('cart_token', '', time() - 3600, '/');
+                    }
+                }
+
+                // Redirección tras login (viene de finalizar compra)
+                if (isset($_SESSION['checkout_redirect'])) {
+                    unset($_SESSION['checkout_redirect']);
+                    header('Location: finalizar_compra.php');
+                } else {
+                    header('Location: catalogo.php');
+                }
             } else {
                 $errores = "Contrasena incorrecta.";
             } 
@@ -42,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errores .= "Completa todos los campos.";
     }
 }
-// 4. HTML (después de toda la lógica que pueda redirigir)
 ?>
 
 <!DOCTYPE html>

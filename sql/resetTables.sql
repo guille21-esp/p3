@@ -67,6 +67,8 @@ CREATE TABLE Carrito_Ventas (
   ID_Cliente INT NULL,
   Cantidad_Productos INT DEFAULT 0,
   Total DECIMAL(10, 2) DEFAULT 0.00,
+  Temporal_Token CHAR(32) NULL,
+  Fecha_Expiracion DATETIME NULL,
   CONSTRAINT FK_Carrito_Cliente FOREIGN KEY (ID_Cliente) 
     REFERENCES Clientes(ID_Cliente) ON DELETE SET NULL
 ) ENGINE=InnoDB;

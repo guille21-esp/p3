@@ -2,7 +2,9 @@
 session_start();
 require_once 'dbgestion/sqlDatabase.php';
 
+// Redirigir invitados a login
 if (!isset($_SESSION['idCliente'])) {
+    $_SESSION['checkout_redirect'] = true;
     header('Location: login.php');
     exit;
 }

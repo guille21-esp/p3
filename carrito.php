@@ -1,27 +1,59 @@
 <?php
 session_start();
-
 require_once 'dbgestion/sqlDatabase.php';
 
-if(!isset($_SESSION['idCliente'])) {
-    header('Location: login.php');
-    exit;
-  }
-
-$idCliente = $_SESSION['idCliente'];
 $conn = Database::getInstancia()->getConexion();
+$idCarrito = null;
+$temporalToken = $_COOKIE['cart_token'] ?? null;
 
-// Obtener ID del carrito del cliente (único por cliente)
-$stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas WHERE ID_Cliente = ?");
-$stmt->execute([$idCliente]);
-$row = $stmt->fetch();
-$idCarrito = $row ? $row['ID_Carrito'] : null;
+if (isset($_SESSION['idCliente'])){
+    $idCliente = $_SESSION['idCliente'];
 
-if(!$idCarrito) {
-    // Crear un carrito si no existe
-    $stmt = $conn->prepare("INSERT INTO Carrito_Ventas (ID_Cliente) VALUES (?)");
+    // Obtener carrito del cliente
+    $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas WHERE ID_Cliente = ?");
     $stmt->execute([$idCliente]);
-    $idCarrito = $conn->lastInsertId();
+    $row = $stmt->fetch();
+    $idCarrito = $row ? $row['ID_Carrito'] : null;
+    
+    // Si existe un token temporal, fusionar los carritos
+    if($temporalToken) {
+        $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas WHERE ID = ?");
+        $stmt->execute([$temporalToken]);
+        $tempCart = $stmt->fetch();
+    
+        if($tempCart) {
+            // Fusionar items
+            $conn->exec("UPDATE Detalle_Carrito SET ID_Carrito = $idCarrito WHERE ID_Carrito = {$tempCart['ID_Carrito']}");
+            //Eliminar el carrito temporal
+            $conn->exec("DELETE FROM Carrito_Ventas WHERE ID_Carrito = {$tempCart['ID_Carrito']}");
+            // Eliminar cookie
+            setcookie('cart_token', '', time() - 3600, '/');
+        }
+    }
+    // Crear carrito si no existe (SOLO para usuarios registrados)
+    if(!$idCarrito) {
+        $stmt = $conn->prepare("INSERT INTO Carrito_Ventas (ID_Cliente) VALUES (?)");
+        $stmt->execute([$idCliente]);
+        $idCarrito = $conn->lastInsertId();
+    }
+} else { // Usuario invitado
+    if($temporalToken) {
+        $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas 
+                              WHERE TemporalToken = ? AND FechaExpiracion > NOW()");
+        $stmt->execute([$temporalToken]);
+        $row = $stmt->fetch();
+        $idCarrito = $row ? $row['ID_Carrito'] : null;
+    }
+    
+    if(!$idCarrito) {
+        // Crear nuevo carrito temporal
+        $token = bin2hex(random_bytes(16));
+        $stmt = $conn->prepare("INSERT INTO Carrito_Ventas (TemporalToken, FechaExpiracion) 
+                               VALUES (?, NOW() + INTERVAL 7 DAY)");
+        $stmt->execute([$token]);
+        $idCarrito = $conn->lastInsertId();
+        setcookie('cart_token', $token, time() + 604800, '/'); // 7 días
+    }
 }
 
 $total = 0;
@@ -51,7 +83,7 @@ $total = 0;
 
                 <?php if (!$idCarrito): ?>
                     <p>
-                        Oh no! El carrito está vacío :/
+                        Oh no! El carrito no existe :/
                     </p>
                 <?php else: ?>
                     <?php
@@ -61,7 +93,7 @@ $total = 0;
                     ?>
 
                     <?php if (empty($productos)): ?>
-                        <p>TU carrito está vacío </p>
+                        <p>Oh no, tu carrito está vacío :/ <br><br>¡Vuelve a nuestra tienda para seleccionar algunos productos alucinantes! </p>
                     <?php else: ?>
                         <?php foreach ($productos as $detalle):
                             $subtotal = $detalle['Precio'] * $detalle['Cantidad'];
