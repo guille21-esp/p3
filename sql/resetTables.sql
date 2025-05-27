@@ -1,7 +1,15 @@
 -- Archivo: reset_tables.sql
 -- Elimina todas las tablas de la base de datos tienda_online
 -- ANTES DE EJECUTAR ESTE ARCHIVO SE DEBERÍA HACER UN BACKUP:
--- mysqldump -u usuario -p tienda_online > backup_tienda_online.sql
+-- mysqldump -u sie -p tienda_online > sql/backup_tienda_online.sql
+
+
+-- Para eliminar la BBDD si existe, descomentar SÓLO si se quiere borrar todo
+-- DROP DATABASE IF EXISTS tienda_online;
+
+CREATE DATABASE IF NOT EXISTS tienda_online
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
 
 USE tienda_online;
 
@@ -24,9 +32,12 @@ CREATE TABLE Productos(
   ID_Producto INT AUTO_INCREMENT PRIMARY KEY, 
   GTIN VARCHAR(14) UNIQUE,
   Nombre VARCHAR(50) NOT NULL,
+  Contenido VARCHAR(255) NULL,
+  Edicion VARCHAR(255) NULL,
+  Rarezas VARCHAR(255) NULL,
   Stock INT DEFAULT 0, 
   Precio_Compra DECIMAL(7, 2),
-  Precio_Venta DECIMAL(7, 2) NOT NULL, 
+  Precio_Venta DECIMAL(10, 2) NOT NULL, 
   Categoria VARCHAR(20), 
   ImagenURL VARCHAR(255) NULL 
 ) ENGINE=InnoDB;
@@ -55,7 +66,9 @@ CREATE TABLE Carrito_Ventas (
   ID_Carrito INT AUTO_INCREMENT PRIMARY KEY,
   ID_Cliente INT NULL,
   Cantidad_Productos INT DEFAULT 0,
-  Total DECIMAL(6, 2) DEFAULT 0.00,
+  Total DECIMAL(10, 2) DEFAULT 0.00,
+  Temporal_Token CHAR(32) NULL,
+  Fecha_Expiracion DATETIME NULL,
   CONSTRAINT FK_Carrito_Cliente FOREIGN KEY (ID_Cliente) 
     REFERENCES Clientes(ID_Cliente) ON DELETE SET NULL
 ) ENGINE=InnoDB;
@@ -69,7 +82,7 @@ CREATE TABLE Detalle_Carrito (
   Nombre_Producto VARCHAR(50),
   Categoria VARCHAR(40),
   GTIN VARCHAR(14),
-  Precio DECIMAL(5, 2) NOT NULL, 
+  Precio DECIMAL(10, 2) NOT NULL, 
   Cantidad INT DEFAULT 1 NOT NULL,
   PRIMARY KEY (ID_Carrito, ID_Producto), 
   CONSTRAINT FK_Detalle_Carrito_CV FOREIGN KEY (ID_Carrito) 

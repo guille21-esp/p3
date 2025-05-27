@@ -3,7 +3,7 @@ require_once 'dbgestion/sqlCreds.php';
 
 class Database {
     private static $instancia = null;
-    private $conexion;
+    private $conexion; // ESTO ES EL DATO PDO QUE ES LA CONEXIÓN A LA BBDD
 
     private function __construct() {
         try {

@@ -1,21 +1,60 @@
 <?php
 session_start();
 require_once 'dbgestion/sqlDatabase.php';
-echo "Tenemos el siguiente idCliente: " . $_SESSION['idCliente'];
-//if(!isset($_SESSION['idCliente'])) {
-//    header('Location: login.php');
-//    exit;
-//  }
 
-$idCliente = $_SESSION['idCliente'];
 $conn = Database::getInstancia()->getConexion();
+$idCarrito = null;
+$temporalToken = $_COOKIE['cart_token'] ?? null;
 
-// Obtener ID del carrito del cliente (único por cliente)
-$stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas WHERE ID_Cliente = ?");
-$stmt->execute([$idCliente]);
-$row = $stmt->fetch();
-$idCarrito = $row ? $row['ID_Carrito'] : null;
+if (isset($_SESSION['idCliente'])){
+    $idCliente = $_SESSION['idCliente'];
 
+    // Obtener carrito del cliente
+    $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas WHERE ID_Cliente = ?");
+    $stmt->execute([$idCliente]);
+    $row = $stmt->fetch();
+    $idCarrito = $row ? $row['ID_Carrito'] : null;
+    
+    // Si existe un token temporal, fusionar los carritos
+    if($temporalToken) {
+        $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas WHERE Temporal_Token = ?");
+        $stmt->execute([$temporalToken]);
+        $tempCart = $stmt->fetch();
+    
+        if($tempCart) {
+            // Fusionar items
+            $conn->exec("UPDATE Detalle_Carrito SET ID_Carrito = $idCarrito WHERE ID_Carrito = {$tempCart['ID_Carrito']}");
+            //Eliminar el carrito temporal
+            $conn->exec("DELETE FROM Carrito_Ventas WHERE ID_Carrito = {$tempCart['ID_Carrito']}");
+            // Eliminar cookie
+            setcookie('cart_token', '', time() - 3600, '/');
+        }
+    }
+    // Crear carrito si no existe (SOLO para usuarios registrados)
+    if(!$idCarrito) {
+        $stmt = $conn->prepare("INSERT INTO Carrito_Ventas (ID_Cliente) VALUES (?)");
+        $stmt->execute([$idCliente]);
+        $idCarrito = $conn->lastInsertId();
+    }
+} else { // Usuario invitado
+    if($temporalToken) {
+        $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas 
+                              WHERE Temporal_Token = ? AND Fecha_Expiracion > NOW()");
+        $stmt->execute([$temporalToken]);
+        $row = $stmt->fetch();
+        $idCarrito = $row ? $row['ID_Carrito'] : null;
+    }
+    
+    if(!$idCarrito) {
+        // Crear nuevo carrito temporal
+        $token = bin2hex(random_bytes(16));
+        $stmt = $conn->prepare("INSERT INTO Carrito_Ventas (Temporal_Token, Fecha_Expiracion) 
+                               VALUES (?, NOW() + INTERVAL 7 DAY)");
+        $stmt->execute([$token]);
+        $idCarrito = $conn->lastInsertId();
+        setcookie('cart_token', $token, time() + 604800, '/'); // 7 días
+    }
+}
 
 $total = 0;
 ?>
@@ -43,20 +82,18 @@ $total = 0;
                 <h1>Productos en el carrito</h1>
 
                 <?php if (!$idCarrito): ?>
-                    <p>Tu carrito está vacío.</p>
-                    <?php
-                    header("Location: modificar_carrito.php");
-                    exit();
-                ?>
+                    <p>
+                        Oh no! El carrito no existe :/
+                    </p>
                 <?php else: ?>
                     <?php
                     $stmt = $conn->prepare("SELECT * FROM Detalle_Carrito WHERE ID_Carrito = ?");
-                    $stms->execute([$idCarrito]);
+                    $stmt->execute([$idCarrito]);
                     $productos = $stmt->fetchAll();
                     ?>
 
                     <?php if (empty($productos)): ?>
-                        <p>TU carrito está vacío </p>
+                        <p>Oh no, tu carrito está vacío :/ <br><br>¡Vuelve a nuestra tienda para seleccionar algunos productos alucinantes! </p>
                     <?php else: ?>
                         <?php foreach ($productos as $detalle):
                             $subtotal = $detalle['Precio'] * $detalle['Cantidad'];
@@ -72,19 +109,19 @@ $total = 0;
                                 <p class="precio"><?= $detalle['Precio'] ?>€</p>
                                 <div class="cantidad-cont">
                                     <form method="post" action="modificar_carrito.php">
-                                        <input type="hidden" name="id_producto" value="<?=$detalle['ID_Producto']?>">
+                                        <input type="hidden" name="idProducto" value="<?=$detalle['ID_Producto']?>">
                                         <input type="hidden" name="accion" value="restar">
                                         <button class="btn-cantidad">-</button>
                                     </form>
                                     <span class="cantidad"><?= $detalle['Cantidad'] ?> </span>
                                     <form method="post" action="modificar_carrito.php" style="display: inline;">
-                                        <input type="hidden" name="id_producto" value="<?= $detalle['ID_Producto'] ?>">
+                                        <input type="hidden" name="idProducto" value="<?= $detalle['ID_Producto'] ?>">
                                         <input type="hidden" name="accion" value="sumar">
                                         <button class="btn-cantidad">+</button>
                                     </form>
                                 </div>
                                 <form method="post" action="modificar_carrito.php">
-                                    <input type="hidden" name="id_producto" value="<?= $detalle['ID_Producto'] ?>">
+                                    <input type="hidden" name="idProducto" value="<?= $detalle['ID_Producto'] ?>">
                                     <input type="hidden" name="accion" value="eliminar">
                                     <button class="btn-cantidad">Eliminar</button>
                                 </form>
