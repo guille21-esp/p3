@@ -1,7 +1,15 @@
 -- Archivo: reset_tables.sql
 -- Elimina todas las tablas de la base de datos tienda_online
 -- ANTES DE EJECUTAR ESTE ARCHIVO SE DEBERÍA HACER UN BACKUP:
--- mysqldump -u usuario -p tienda_online > backup_tienda_online.sql
+-- mysqldump -u sie -p tienda_online > sql/backup_tienda_online.sql
+
+
+-- Para eliminar la BBDD si existe, descomentar SÓLO si se quiere borrar todo
+-- DROP DATABASE IF EXISTS tienda_online;
+
+CREATE DATABASE IF NOT EXISTS tienda_online
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
 
 USE tienda_online;
 

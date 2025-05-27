@@ -10,9 +10,9 @@ darle privilegios en la base de datos para que deje conectarse y crear tablas:
 
 sudo mysql -u root -p
 
-CREATE USER 'admin_tienda'@'localhost' IDENTIFIED BY 'una_contraseña_muy_segura';
+CREATE USER 'sie'@'localhost' IDENTIFIED BY 'siepwd';
 
-GRANT ALL PRIVILEGES ON tienda_online.* TO 'admin_tienda'@'localhost';
+GRANT ALL PRIVILEGES ON tienda_online.* TO 'sie'@'localhost';
 
 FLUSH PRIVILEGES;
 */
