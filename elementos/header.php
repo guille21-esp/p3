@@ -23,15 +23,5 @@
         🛒 Carrito de compra
       </button>
     </div>
-  </section>
-
-  <div class="barra_inferior">
-    <div class="centro-busqueda">
-      <form action="/buscar" method="GET">
-        <input type="search" name="q" placeholder="Buscar..." />
-        <button type="submit">Buscar</button>
-      </form>
-    </div>
-  </div>
-   
+  </section>   
 </header>
