@@ -5,23 +5,23 @@ require_once 'dbgestion/sqlDatabase.php';
 $conn = Database::getInstancia()->getConexion();
 $temporalToken = $_COOKIE['cart_token'] ?? null;
 
+$idProducto = $_POST['idProducto'] ?? null;
+$accion = $_POST['accion'] ?? null;
+
+// esta puesto así para que se pueda recibir el formulario desde
+// finalizar_compra.php y se utilice el vaciar carrito del switch
+// para la reutilización de código
+if(!$accion || ($accion !== 'vaciar' && !$idProducto)) {
+    header('Location: catalogo.php');
+    exit;
+}
+
 // Determinamos la identidad del carrito
 if(isset($_SESSION['idCliente'])) {
     // Lógica para clientes registrados
 
     $idCliente = $_SESSION['idCliente'];
-    $idProducto = $_POST['idProducto'] ?? null;
-    $accion = $_POST['accion'] ?? null;
-
-    // esta puesto así para que se pueda recibir el formulario desde
-    // finalizar_compra.php y se utilice el vaciar carrito del switch
-    // para la reutilización de código
-    if(!$accion || ($accion !== 'vaciar' && !$idProducto)) {
-        header('Location: catalogo.php');
-        exit;
-    }
-
-
+    
     // 1. Obtener carrito si existe
     $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas WHERE ID_Cliente = ?");
     $stmt->execute([$idCliente]);
@@ -39,27 +39,27 @@ if(isset($_SESSION['idCliente'])) {
     
 } else {
     // Lógica para invitados
-    if(!$TemporalToken) {
+    if(!$temporalToken) {
         header('Location: catalogo.php');
         exit;
     }
 
     // 1. Obtener Carrito Temporal
     $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas
-                            WHERE TemporalToken = ? AND FechaExpiracion > NOW()");
-    $stmt->execute($temporalToken);
+                            WHERE Temporal_Token = ? AND Fecha_Expiracion > NOW()");
+    $stmt->execute([$temporalToken]);
     $carrito = $stmt->fetch();
 
     if(!$carrito) {
         // 2. Crear nuevo carrito si ha expirado
         $token = bin2hex(random_bytes(16));
-        $stmt = $conn->prepare("INSERT INTO Carrito_Ventas ( TemporalToken, FechaExpiracion)
+        $stmt = $conn->prepare("INSERT INTO Carrito_Ventas ( Temporal_Token, Fecha_Expiracion)
                                                             VALUES (?, NOW() + INTERVAL 7 DAY)");
         $stmt->execute([$token]);
         $idCarrito = $conn->lastInsertId();
-        $setcookie('car_token', $token, time() +  604800, '/');
+        setcookie('car_token', $token, time() +  604800, '/');
     } else {
-        $idCarrito = $idCarrito['idCarrito'];
+        $idCarrito = $carrito['ID_Carrito'];
     }
 }
 
@@ -88,7 +88,7 @@ if(isset($_SESSION['idCliente'])) {
             } else {
                 // No existe: insertar
                 $stmt = $conn->prepare("INSERT INTO Detalle_Carrito (ID_Carrito, ID_Producto, Nombre_Producto, Categoria, GTIN, Precio, Cantidad) VALUES (?, ?, ?, ?, ?, ?, 1)");
-                $stmt->execute([
+                $stmt->execute([ // line 91
                     $idCarrito,
                     $producto['ID_Producto'],
                     $producto['Nombre'],

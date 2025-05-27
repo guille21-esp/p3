@@ -17,7 +17,7 @@ if (isset($_SESSION['idCliente'])){
     
     // Si existe un token temporal, fusionar los carritos
     if($temporalToken) {
-        $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas WHERE ID = ?");
+        $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas WHERE Temporal_Token = ?");
         $stmt->execute([$temporalToken]);
         $tempCart = $stmt->fetch();
     
@@ -39,7 +39,7 @@ if (isset($_SESSION['idCliente'])){
 } else { // Usuario invitado
     if($temporalToken) {
         $stmt = $conn->prepare("SELECT ID_Carrito FROM Carrito_Ventas 
-                              WHERE TemporalToken = ? AND FechaExpiracion > NOW()");
+                              WHERE Temporal_Token = ? AND Fecha_Expiracion > NOW()");
         $stmt->execute([$temporalToken]);
         $row = $stmt->fetch();
         $idCarrito = $row ? $row['ID_Carrito'] : null;
@@ -48,7 +48,7 @@ if (isset($_SESSION['idCliente'])){
     if(!$idCarrito) {
         // Crear nuevo carrito temporal
         $token = bin2hex(random_bytes(16));
-        $stmt = $conn->prepare("INSERT INTO Carrito_Ventas (TemporalToken, FechaExpiracion) 
+        $stmt = $conn->prepare("INSERT INTO Carrito_Ventas (Temporal_Token, Fecha_Expiracion) 
                                VALUES (?, NOW() + INTERVAL 7 DAY)");
         $stmt->execute([$token]);
         $idCarrito = $conn->lastInsertId();
