@@ -57,7 +57,7 @@ if(isset($_SESSION['idCliente'])) {
                                                             VALUES (?, NOW() + INTERVAL 7 DAY)");
         $stmt->execute([$token]);
         $idCarrito = $conn->lastInsertId();
-        setcookie('car_token', $token, time() +  604800, '/');
+        setcookie('cart_token', $token, time() +  604800, '/');
     } else {
         $idCarrito = $carrito['ID_Carrito'];
     }
