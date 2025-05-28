@@ -102,7 +102,7 @@ CREATE TABLE Envios (
   ID_Envio INT GENERATED AUTO_INCREMENT PRIMARY KEY,
   Id_Venta INT NOT NULL,
   Direccion_Envio VARCHAR2(255) NOT NULL,
-  Estado_Envio VARCHAR2(50) DEFAULT 'Pendiente de preparación', 
+  Estado_Envio VARCHAR2(50) DEFAULT 'Nuevo Pedido', 
   Fecha_Estimada_Entrega DATE NULL,
   Num_Seguimiento VARCHAR2(50) NULL, 
   Transportista_Asignado VARCHAR2(100) NULL, 
