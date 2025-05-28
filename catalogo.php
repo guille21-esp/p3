@@ -49,7 +49,7 @@ $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <form method="GET" action="catalogo.php">
                 <input type="text" name="busqueda" placeholder="Buscar productos..." value="<?=htmlspecialchars($_GET['busqueda'] ?? '') ?>">
                 
-                <div class="checkout-container">
+                <div class="checkbox-container">
                     <label><input type="checkbox" name="categorias[]" value="Boosters" <?= in_array("Boosters", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Boosters</label>
                     <label><input type="checkbox" name="categorias[]" value="Cartas Gradadas" <?= in_array("Cartas Gradadas", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Cartas Gradadas</label>
                     <label><input type="checkbox" name="categorias[]" value="Lotes" <?= in_array("Lotes", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Lotes</label>
