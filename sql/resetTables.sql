@@ -78,6 +78,51 @@ CREATE TABLE Carrito_Ventas (
 ) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
+--                 Tabla Venta
+-- -----------------------------------------------------
+CREATE TABLE Venta (
+  ID_Venta INT AUTO_INCREMENT PRIMARY KEY, 
+  ID_Cliente INT NOT NULL, 
+  Fecha DATE DEFAULT CURRENT_TIMESTAMP, 
+  Cantidad_de_Productos INT DEFAULT 0, 
+  Subtotal_Productos DECIMAL(7, 2) DEFAULT 0.00, 
+  ID_Opcion_Envio INT NULL, 
+  Coste_Envio_Aplicado DECIMAL(7, 2) DEFAULT 0.00, 
+  Total DECIMAL(7, 2) DEFAULT 0.00, 
+  CONSTRAINT FK_Venta_Cliente FOREIGN KEY (ID_Cliente) REFERENCES Clientes(ID_Cliente),
+  CONSTRAINT FK_Venta_OpcionEnvio FOREIGN KEY (ID_Opcion_Envio) REFERENCES Opcion_Envio(ID_Opcion_Envio)
+);
+
+ALTER TABLE Venta
+RENAME COLUMN Total TO Subtotal_Productos;
+
+ALTER TABLE Venta ADD (
+  ID_Opcion_Envio INT NULL,
+  Coste_Envio_Aplicado DECIMAL(7, 2) DEFAULT 0.00,
+  Total DECIMAL(7, 2) DEFAULT 0.00
+);
+
+ALTER TABLE Venta
+ADD CONSTRAINT FK_Venta_OpcionEnvio
+FOREIGN KEY (ID_Opcion_Envio) REFERENCES Opcion_Envio(ID_Opcion_Envio);
+
+-- -----------------------------------------------------
+--                Tabla Detalle_Venta
+-- -----------------------------------------------------
+CREATE TABLE Detalle_Venta (
+  ID_Venta INT NOT NULL, 
+  ID_Producto INT NOT NULL, 
+  Nombre VARCHAR(50), 
+  Categoria VARCHAR(40), 
+  GTIN_Producto VARCHAR(14), 
+  Precio DECIMAL(5, 2), 
+  Cantidad INT DEFAULT 1 NOT NULL, 
+  CONSTRAINT PK_Detalle_Venta PRIMARY KEY (ID_Venta, ID_Producto),
+  CONSTRAINT FK_DetalleV_Venta FOREIGN KEY (ID_Venta) REFERENCES Venta(ID_Venta) ON DELETE CASCADE,
+  CONSTRAINT FK_DetalleV_Producto FOREIGN KEY (ID_Producto) REFERENCES Productos(ID_Producto) 
+);
+
+-- -----------------------------------------------------
 --                Tabla Detalle_Carrito
 -- -----------------------------------------------------
 CREATE TABLE Detalle_Carrito (
@@ -100,14 +145,14 @@ CREATE TABLE Detalle_Carrito (
 -- -----------------------------------------------------
 CREATE TABLE Envios (
   ID_Envio INT GENERATED AUTO_INCREMENT PRIMARY KEY,
-  Id_Venta INT NOT NULL,
-  Direccion_Envio VARCHAR2(255) NOT NULL,
-  Estado_Envio VARCHAR2(50) DEFAULT 'Nuevo Pedido', 
+  ID_Venta INT NOT NULL,
+  Direccion_Envio VARCHAR(255) NOT NULL,
+  Estado_Envio VARCHAR(50) DEFAULT 'Nuevo Pedido', 
   Fecha_Estimada_Entrega DATE NULL,
-  Num_Seguimiento VARCHAR2(50) NULL, 
-  Transportista_Asignado VARCHAR2(100) NULL, 
+  Num_Seguimiento VARCHAR(50) NULL, 
+  Transportista_Asignado VARCHAR(100) NULL, 
   Fecha_Creacion_Envio DATE DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT FK_Envio_Venta FOREIGN KEY (Id_Venta) REFERENCES Venta(Id_Venta) ON DELETE CASCADE
+  CONSTRAINT FK_Envio_Venta FOREIGN KEY (ID_Venta) REFERENCES Venta(ID_Venta) ON DELETE CASCADE
 );
 
 -- -----------------------------------------------------
@@ -117,9 +162,9 @@ CREATE TABLE Historial_Estado_Envio (
   ID_Historial INT AUTO_INCREMENT PRIMARY KEY,
   ID_Envio INT NOT NULL,
   FechaHora TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-  Estado_Envio VARCHAR2(50) NOT NULL, 
-  Ubicacion VARCHAR2(255) NULL, 
-  Notas VARCHAR2(500) NULL, 
+  Estado_Envio VARCHAR(50) NOT NULL, 
+  Ubicacion VARCHAR(255) NULL, 
+  Notas VARCHAR(500) NULL, 
   CONSTRAINT FK_Historial_Envio FOREIGN KEY (ID_Envio) REFERENCES Envios(ID_Envio) ON DELETE CASCADE
 );
 
@@ -128,9 +173,9 @@ CREATE TABLE Historial_Estado_Envio (
 -- -----------------------------------------------------
 CREATE TABLE Opcion_Envio (
   ID_Opcion_Envio INT AUTO_INCREMENT PRIMARY KEY,
-  Nombre_Opcion VARCHAR2(100) NOT NULL, 
-  Descripcion VARCHAR2(255) NULL, 
-  Coste NUMBER(7, 2) NOT NULL,
+  Nombre_Opcion VARCHAR(100) NOT NULL, 
+  Descripcion VARCHAR(255) NULL, 
+  Coste DECIMAL(7, 2) NOT NULL,
   Activa CHAR(1) DEFAULT 'S' CHECK (Activa IN ('S', 'N'))
 );
 
@@ -140,7 +185,7 @@ CREATE TABLE Opcion_Envio (
 CREATE TABLE Transportista (
   ID_Transportista INT AUTO_INCREMENT PRIMARY KEY, 
   Nombre VARCHAR(100) NOT NULL, 
-  InfoContacto VARCHAR2(255) NULL, 
+  InfoContacto VARCHAR(255) NULL, 
   Activo CHAR(1) DEFAULT 'S' CHECK (Activo IN ('S', 'N')) 
 );
 

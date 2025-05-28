@@ -96,12 +96,17 @@ $total = 0;
                         <p>Oh no, tu carrito está vacío :/ <br><br>¡Vuelve a nuestra tienda para seleccionar algunos productos alucinantes! </p>
                     <?php else: ?>
                         <?php foreach ($productos as $detalle):
+                            // Calculo de la ruta de la imagen
+                            $stmt = $conn->prepare("SELECT ImagenURL FROM Productos WHERE ID_Producto = ?");
+                            $stmt->execute([$detalle['ID_Producto']]);
+                            $imagen = $stmt->fetch();
+
                             $subtotal = $detalle['Precio'] * $detalle['Cantidad'];
                             $total += $subtotal;
                         ?>
                         <div class="producto-carrito">
                             <div class="imagen-cont">
-                                <img src="imgs/<?=$detalle['GTIN'] ?>.jpeg" alt="<?=$detalle['Nombre_Producto']?>">
+                                <img src="<?=htmlspecialchars($imagen)?>" alt="<?=$detalle['Nombre_Producto']?>">
                         </div>
                             <div class="info-carrito">
                                 <h3><?= htmlspecialchars($detalle['Nombre_Producto']) ?></h3>
