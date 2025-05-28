@@ -1,3 +1,9 @@
+<?php
+session_start();
+?>
+
+
+
 <header class="cabecera">
   <section class="barra_superior">
     <figure class="logoynombre">
@@ -23,8 +29,5 @@
         🛒 Carrito de compra
       </button>
     </div>
-  </section>
-
-
-   
+  </section>   
 </header>

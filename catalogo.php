@@ -78,21 +78,21 @@ $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
         <section id="galeria-actividades">
-    <?php if (empty($productos)): ?>
-        <p>No hay productos para mostrar.</p>
-    <?php else: ?>
-        <?php foreach ($productos as $producto): ?>
-            <a href="pagina_producto.php?gtin=<?= $producto['GTIN'] ?>" class="actividad">
-                <div class="imagen-container">
-                    <img src="<?= htmlspecialchars($producto['ImagenURL']) ?>" alt="<?= htmlspecialchars($producto['Nombre']) ?>">
-                </div>
-                <h3><?= htmlspecialchars($producto['Nombre']) ?></h3>
-                <p>Categoría: <?= htmlspecialchars($producto['Categoria']) ?></p>
-                <p><?= htmlspecialchars($producto['Precio_Venta']) ?>€</p>
-            </a>
-        <?php endforeach; ?>
-    <?php endif; ?>
-</section>
+            <?php if (empty($productos)): ?>
+                <p>No hay productos para mostrar.</p>
+            <?php else: ?>
+                <?php foreach ($productos as $producto): ?>
+                    <a href="pagina_producto.php?gtin=<?= $producto['GTIN'] ?>" class="actividad">
+                        <div class="imagen-container">
+                            <img src="<?= htmlspecialchars($producto['ImagenURL']) ?>" alt="<?= htmlspecialchars($producto['Nombre']) ?>">
+                        </div>
+                        <h3><?= htmlspecialchars($producto['Nombre']) ?></h3>
+                        <p>Categoría: <?= htmlspecialchars($producto['Categoria']) ?></p>
+                        <p><?= htmlspecialchars($producto['Precio_Venta']) ?>€</p>
+                    </a>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </section>
 
 
         

@@ -157,3 +157,15 @@ CREATE TABLE Opcion_Envio (
 );
 
 DESC Opcion_Envio;
+
+-- -----------------------------------------------------
+--               Tabla Transportista
+-- -----------------------------------------------------
+CREATE TABLE Transportista (
+  ID_Transportista INT GENERATED AS IDENTITY PRIMARY KEY, 
+  Nombre VARCHAR(100) NOT NULL, 
+  InfoContacto VARCHAR2(255) NULL, 
+  Activo CHAR(1) DEFAULT 'S' CHECK (Activo IN ('S', 'N')) 
+);
+
+DESC Transportista;

@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Redirección tras login (viene de finalizar compra)
                 if (isset($_SESSION['checkout_redirect'])) {
                     unset($_SESSION['checkout_redirect']);
-                    header('Location: finalizar_compra.php');
+                    header('Location: modificar_carrito.php');
                 } else {
                     header('Location: catalogo.php');
                 }
