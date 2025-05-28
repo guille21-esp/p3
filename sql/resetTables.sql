@@ -17,6 +17,10 @@ USE tienda_online;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Eliminar tablas en el orden correcto (primero las que tienen dependencias)
+DROP TABLE IF EXISTS Historial_Estado_Envio;
+DROP TABLE IF EXISTS Opcion_Envio;
+DROP TABLE IF EXISTS Transportista;
+DROP IF TABLE EXISTS Envios;
 DROP TABLE IF EXISTS Detalle_Carrito;
 DROP TABLE IF EXISTS Carrito_Ventas;
 DROP TABLE IF EXISTS Productos;
@@ -90,6 +94,55 @@ CREATE TABLE Detalle_Carrito (
   CONSTRAINT FK_Detalle_Prod FOREIGN KEY (ID_Producto) 
     REFERENCES Productos(ID_Producto)
 ) ENGINE=InnoDB;
+
+-- -----------------------------------------------------
+--                  Tabla Envío
+-- -----------------------------------------------------
+CREATE TABLE Envios (
+  ID_Envio INT GENERATED AS IDENTITY PRIMARY KEY,
+  Id_Venta INT NOT NULL,
+  Direccion_Envio VARCHAR2(255) NOT NULL,
+  Estado_Envio VARCHAR2(50) DEFAULT 'Pendiente de preparación', 
+  Fecha_Estimada_Entrega DATE NULL,
+  Num_Seguimiento VARCHAR2(50) NULL, 
+  Transportista_Asignado VARCHAR2(100) NULL, 
+  Fecha_Creacion_Envio DATE DEFAULT SYSDATE,
+  CONSTRAINT FK_Envio_Venta FOREIGN KEY (Id_Venta) REFERENCES Venta(Id_Venta) ON DELETE CASCADE
+);
+
+-- -----------------------------------------------------
+--             Tabla Historial_Estado_Envío
+-- -----------------------------------------------------
+CREATE TABLE Historial_Estado_Envio (
+  ID_Historial INT GENERATED AS IDENTITY PRIMARY KEY,
+  ID_Envio INT NOT NULL,
+  FechaHora TIMESTAMP DEFAULT SYSTIMESTAMP, 
+  Estado_Envio VARCHAR2(50) NOT NULL, 
+  Ubicacion VARCHAR2(255) NULL, 
+  Notas VARCHAR2(500) NULL, 
+  CONSTRAINT FK_Historial_Envio FOREIGN KEY (ID_Envio) REFERENCES Envios(ID_Envio) ON DELETE CASCADE
+);
+
+-- -----------------------------------------------------
+--                Tabla Opción_Envío
+-- -----------------------------------------------------
+CREATE TABLE Opcion_Envio (
+  ID_Opcion_Envio INT GENERATED AS IDENTITY PRIMARY KEY,
+  Nombre_Opcion VARCHAR2(100) NOT NULL, 
+  Descripcion VARCHAR2(255) NULL, 
+  Coste NUMBER(7, 2) NOT NULL,
+  Activa CHAR(1) DEFAULT 'S' CHECK (Activa IN ('S', 'N'))
+);
+
+-- -----------------------------------------------------
+--               Tabla Transportista
+-- -----------------------------------------------------
+CREATE TABLE Transportista (
+  ID_Transportista INT GENERATED AS IDENTITY PRIMARY KEY, 
+  Nombre VARCHAR(100) NOT NULL, 
+  InfoContacto VARCHAR2(255) NULL, 
+  Activo CHAR(1) DEFAULT 'S' CHECK (Activo IN ('S', 'N')) 
+);
 
 -- Mensaje de confirmación
 SELECT 'Base de datos reinicializada correctamente' AS Mensaje;
