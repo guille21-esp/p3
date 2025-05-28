@@ -106,7 +106,7 @@ CREATE TABLE Envios (
   Fecha_Estimada_Entrega DATE NULL,
   Num_Seguimiento VARCHAR2(50) NULL, 
   Transportista_Asignado VARCHAR2(100) NULL, 
-  Fecha_Creacion_Envio DATE DEFAULT SYSDATE,
+  Fecha_Creacion_Envio DATE DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT FK_Envio_Venta FOREIGN KEY (Id_Venta) REFERENCES Venta(Id_Venta) ON DELETE CASCADE
 );
 
@@ -116,7 +116,7 @@ CREATE TABLE Envios (
 CREATE TABLE Historial_Estado_Envio (
   ID_Historial INT AUTO_INCREMENT PRIMARY KEY,
   ID_Envio INT NOT NULL,
-  FechaHora TIMESTAMP DEFAULT SYSTIMESTAMP, 
+  FechaHora TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
   Estado_Envio VARCHAR2(50) NOT NULL, 
   Ubicacion VARCHAR2(255) NULL, 
   Notas VARCHAR2(500) NULL, 
