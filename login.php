@@ -120,6 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <?php include 'elementos/header.php';?>
     <main>
+        <section class="login-container">
         <form class="login" method="POST" action="login.php" autocomplete="off" novalidate>
             <h2>Iniciar Sesión</h2>
             <?php if(!empty($errores)): ?>
@@ -138,6 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </p>
             <a class= link_alta href="altausuarios.php">¿No tienes cuenta?</a>
         </form>
+        </section>
     </main>
     <?php include 'elementos/footer.php'?>
 </body>
