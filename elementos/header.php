@@ -1,3 +1,9 @@
+<?php
+session_start();
+?>
+
+
+
 <header class="cabecera">
   <section class="barra_superior">
     <figure class="logoynombre">
