@@ -96,10 +96,11 @@ $total = 0;
                         <p>Oh no, tu carrito está vacío :/ <br><br>¡Vuelve a nuestra tienda para seleccionar algunos productos alucinantes! </p>
                     <?php else: ?>
                         <?php foreach ($productos as $detalle):
-                            // Calculo de la ruta de la imagen
+                        // Calculo de la ruta de la imagen
                             $stmt = $conn->prepare("SELECT ImagenURL FROM Productos WHERE ID_Producto = ?");
                             $stmt->execute([$detalle['ID_Producto']]);
-                            $imagen = $stmt->fetch();
+                            $imagenData = $stmt->fetch();
+                            $imagen = $imagenData['ImagenURL']; // Acceder a la columna específica
 
                             $subtotal = $detalle['Precio'] * $detalle['Cantidad'];
                             $total += $subtotal;

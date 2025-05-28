@@ -20,6 +20,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS Historial_Estado_Envio;
 DROP TABLE IF EXISTS Opcion_Envio;
 DROP TABLE IF EXISTS Transportista;
+DROP TABLE IF EXISTS Venta;
+DROP TABLE IF EXISTS Detalle_Venta;
 DROP TABLE IF EXISTS Envios;
 DROP TABLE IF EXISTS Detalle_Carrito;
 DROP TABLE IF EXISTS Carrito_Ventas;
@@ -78,33 +80,31 @@ CREATE TABLE Carrito_Ventas (
 ) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
+--                Tabla Opción_Envío
+-- -----------------------------------------------------
+CREATE TABLE Opcion_Envio (
+  ID_Opcion_Envio INT AUTO_INCREMENT PRIMARY KEY,
+  Nombre_Opcion VARCHAR(100) NOT NULL, 
+  Descripcion VARCHAR(255) NULL, 
+  Coste DECIMAL(7, 2) NOT NULL,
+  Activa CHAR(1) DEFAULT 'S' CHECK (Activa IN ('S', 'N'))
+);
+
+-- -----------------------------------------------------
 --                 Tabla Venta
 -- -----------------------------------------------------
 CREATE TABLE Venta (
   ID_Venta INT AUTO_INCREMENT PRIMARY KEY, 
   ID_Cliente INT NOT NULL, 
-  Fecha DATE DEFAULT CURRENT_TIMESTAMP, 
+  Fecha DATETIME DEFAULT CURRENT_TIMESTAMP, 
   Cantidad_de_Productos INT DEFAULT 0, 
-  Subtotal_Productos DECIMAL(7, 2) DEFAULT 0.00, 
+  Subtotal_Productos DECIMAL(10, 2) DEFAULT 0.00, 
   ID_Opcion_Envio INT NULL, 
   Coste_Envio_Aplicado DECIMAL(7, 2) DEFAULT 0.00, 
-  Total DECIMAL(7, 2) DEFAULT 0.00, 
+  Total DECIMAL(10, 2) DEFAULT 0.00, 
   CONSTRAINT FK_Venta_Cliente FOREIGN KEY (ID_Cliente) REFERENCES Clientes(ID_Cliente),
   CONSTRAINT FK_Venta_OpcionEnvio FOREIGN KEY (ID_Opcion_Envio) REFERENCES Opcion_Envio(ID_Opcion_Envio)
-);
-
-ALTER TABLE Venta
-RENAME COLUMN Total TO Subtotal_Productos;
-
-ALTER TABLE Venta ADD (
-  ID_Opcion_Envio INT NULL,
-  Coste_Envio_Aplicado DECIMAL(7, 2) DEFAULT 0.00,
-  Total DECIMAL(7, 2) DEFAULT 0.00
-);
-
-ALTER TABLE Venta
-ADD CONSTRAINT FK_Venta_OpcionEnvio
-FOREIGN KEY (ID_Opcion_Envio) REFERENCES Opcion_Envio(ID_Opcion_Envio);
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 --                Tabla Detalle_Venta
@@ -115,7 +115,7 @@ CREATE TABLE Detalle_Venta (
   Nombre VARCHAR(50), 
   Categoria VARCHAR(40), 
   GTIN_Producto VARCHAR(14), 
-  Precio DECIMAL(5, 2), 
+  Precio DECIMAL(10, 2), 
   Cantidad INT DEFAULT 1 NOT NULL, 
   CONSTRAINT PK_Detalle_Venta PRIMARY KEY (ID_Venta, ID_Producto),
   CONSTRAINT FK_DetalleV_Venta FOREIGN KEY (ID_Venta) REFERENCES Venta(ID_Venta) ON DELETE CASCADE,
@@ -144,14 +144,14 @@ CREATE TABLE Detalle_Carrito (
 --                  Tabla Envío
 -- -----------------------------------------------------
 CREATE TABLE Envios (
-  ID_Envio INT GENERATED AUTO_INCREMENT PRIMARY KEY,
+  ID_Envio INT AUTO_INCREMENT PRIMARY KEY,
   ID_Venta INT NOT NULL,
   Direccion_Envio VARCHAR(255) NOT NULL,
   Estado_Envio VARCHAR(50) DEFAULT 'Nuevo Pedido', 
   Fecha_Estimada_Entrega DATE NULL,
   Num_Seguimiento VARCHAR(50) NULL, 
   Transportista_Asignado VARCHAR(100) NULL, 
-  Fecha_Creacion_Envio DATE DEFAULT CURRENT_TIMESTAMP,
+  Fecha_Creacion_Envio DATETIME DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT FK_Envio_Venta FOREIGN KEY (ID_Venta) REFERENCES Venta(ID_Venta) ON DELETE CASCADE
 );
 
@@ -161,22 +161,11 @@ CREATE TABLE Envios (
 CREATE TABLE Historial_Estado_Envio (
   ID_Historial INT AUTO_INCREMENT PRIMARY KEY,
   ID_Envio INT NOT NULL,
-  FechaHora TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+  FechaHora DATETIME DEFAULT CURRENT_TIMESTAMP, 
   Estado_Envio VARCHAR(50) NOT NULL, 
   Ubicacion VARCHAR(255) NULL, 
   Notas VARCHAR(500) NULL, 
   CONSTRAINT FK_Historial_Envio FOREIGN KEY (ID_Envio) REFERENCES Envios(ID_Envio) ON DELETE CASCADE
-);
-
--- -----------------------------------------------------
---                Tabla Opción_Envío
--- -----------------------------------------------------
-CREATE TABLE Opcion_Envio (
-  ID_Opcion_Envio INT AUTO_INCREMENT PRIMARY KEY,
-  Nombre_Opcion VARCHAR(100) NOT NULL, 
-  Descripcion VARCHAR(255) NULL, 
-  Coste DECIMAL(7, 2) NOT NULL,
-  Activa CHAR(1) DEFAULT 'S' CHECK (Activa IN ('S', 'N'))
 );
 
 -- -----------------------------------------------------
@@ -190,6 +179,7 @@ CREATE TABLE Transportista (
 );
 
 -- Disparador para actualizar el stock --
+DELIMITER //
 CREATE TRIGGER actualizar_stock_post_venta
 AFTER INSERT ON Detalle_Venta
 FOR EACH ROW
@@ -198,6 +188,7 @@ BEGIN
     SET Stock = Stock - NEW.Cantidad 
     WHERE ID_Producto = NEW.ID_Producto; 
 END;
+//
 
 -- Mensaje de confirmación --
 SELECT 'Base de datos reinicializada correctamente' AS Mensaje;

@@ -10,6 +10,14 @@ session_start();
       <img src="imgs/pokeball.gif" alt="Logo">
       <figcaption>Gotta Collect 'Em All</figcaption>
     </figure>
+
+    <div class="saludo-usuario">
+      <?php if (isset($_SESSION['nombreUsuario'])): ?>
+        <p>Bienvenido, <?= htmlspecialchars($_SESSION['nombreUsuario']) ?> 👋</p>
+      <?php endif; ?>
+    </div>
+
+
     <!-- No sé si queréis crear otra clase en css que sea login-btn -->
     <div class="botones-derecha">
       <?php if(isset($_SESSION['idCliente'])): ?>
@@ -31,3 +39,18 @@ session_start();
     </div>
   </section>   
 </header>
+
+<style>
+  .saludo-usuario {
+  margin-right: 20px;
+  font-weight: bold;
+  color: #2c3e50;
+  align-self: center;
+}
+.barra_superior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+</style>

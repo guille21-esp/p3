@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn = Database::getInstancia()->getConexion();
 
 
-        $stmt = $conn->prepare("SELECT ID_Cliente, Correo, Contrasena FROM Clientes WHERE Correo = ?");
+        $stmt = $conn->prepare("SELECT ID_Cliente, Nombre, Correo, Contrasena FROM Clientes WHERE Correo = ?");
         $stmt->execute([$correo]);
         $cliente = $stmt->fetch();
         
@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($cliente){
             if ($clave === $cliente['Contrasena']){
                 $_SESSION['idCliente'] = $cliente['ID_Cliente'];
+                $_SESSION['nombreUsuario'] = $cliente['Nombre'];
                 $idCliente = $cliente['ID_Cliente'];
 
                 // Fusión de carrito temporal si existe

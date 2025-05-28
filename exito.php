@@ -27,7 +27,7 @@ unset($_SESSION['form_completed']);
             <h1>¡Registro Completado con Éxito!</h1>
             <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDl4b3V0dGZzZ2RqY3V4Y3F5bGZ6Z2J5NnR0eGZ6dHZqZzB1YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ibolLe3mOqHE3PQTtk/giphy.gif" alt="Éxito" class="gif-exito">
             <p>Gracias por registrarte en Gotta Collect 'Em All. Tu cuenta ha sido creada exitosamente.</p>
-            <a href="catalogo.html" class="boton-volver">Volver al Inicio</a>
+            <a href="catalogo.php" class="boton-volver">Volver al Inicio</a>
         </div>
     
     </main>
