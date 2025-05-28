@@ -99,12 +99,25 @@ if(isset($_SESSION['idCliente'])) {
             }
             break;
 
-        case 'restar':
-            // Esto controla que cuando llegue a 0 se llame a eliminar o algo?
-            $stmt = $conn->prepare("UPDATE Detalle_Carrito SET Cantidad = Cantidad - 1 
-                          WHERE ID_Carrito = ? AND ID_Producto = ? AND Cantidad > 1");
-            $stmt->execute([$idCarrito, $idProducto]);
-            break;
+            case 'restar':
+                // Obtener cantidad actual del producto en el carrito
+                $stmt = $conn->prepare("SELECT Cantidad FROM Detalle_Carrito WHERE ID_Carrito = ? AND ID_Producto = ?");
+                $stmt->execute([$idCarrito, $idProducto]);
+                $detalle = $stmt->fetch();
+            
+                if ($detalle) {
+                    if ($detalle['Cantidad'] > 1) {
+                        // Si la cantidad es mayor a 1, simplemente restamos
+                        $stmt = $conn->prepare("UPDATE Detalle_Carrito SET Cantidad = Cantidad - 1 WHERE ID_Carrito = ? AND ID_Producto = ?");
+                        $stmt->execute([$idCarrito, $idProducto]);
+                    } else {
+                        // Si la cantidad es 1, eliminamos el producto del carrito
+                        $stmt = $conn->prepare("DELETE FROM Detalle_Carrito WHERE ID_Carrito = ? AND ID_Producto = ?");
+                        $stmt->execute([$idCarrito, $idProducto]);
+                    }
+                }
+                break;
+            
 
         case 'eliminar':
             $stmt = $conn->prepare("DELETE FROM Detalle_Carrito WHERE ID_Carrito = ? AND ID_Producto = ?");
