@@ -21,7 +21,7 @@ unset($_SESSION['form_completed']);
 </head>
 <body>
     <?php include 'elementos/header.php'; ?>
-    <main id="formulario">
+    <main id="pagina-exito">
     
         <div class="contenedor-exito">
             <h1>¡Registro Completado con Éxito!</h1>
@@ -34,3 +34,66 @@ unset($_SESSION['form_completed']);
     <?php include 'elementos/footer.php';?>
 </body>
 </html>
+
+# he puesto el css dentro del html porque no se actualizaba en el localhost, porlomenos para mi
+
+<style>
+    .contenedor-exito {
+        text-align: center;
+        background-color: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        width: 100%;
+    }
+
+        body {
+            background-color: #f9f9f9;
+            align-items: center;
+        }
+        .gif-exito {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .boton-volver {
+            background-color: #df3232;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .boton-volver:hover {
+            background-color: #b82929;
+        }
+        
+        #pagina-exito {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Centrado vertical */
+            background-color: #f9f9f9;
+        }
+        
+        
+</style>

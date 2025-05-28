@@ -1,15 +1,13 @@
-.contenedor-exito {
-            text-align: center;
-            background-color: white;
-            align-items: center;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            max-width: 500px;
-            height: 550px;
-            width:600px;
-        
-        }
+    .contenedor-exito {
+        text-align: center;
+        background-color: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        width: 100%;
+    }
+
         body {
             background-color: #f9f9f9;
             align-items: center;
@@ -47,6 +45,14 @@
         
         .boton-volver:hover {
             background-color: #b82929;
+        }
+        
+        #pagina-exito {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Centrado vertical */
+            background-color: #f9f9f9;
         }
         
         
