@@ -99,7 +99,7 @@ CREATE TABLE Detalle_Carrito (
 --                  Tabla Envío
 -- -----------------------------------------------------
 CREATE TABLE Envios (
-  ID_Envio INT GENERATED AS IDENTITY PRIMARY KEY,
+  ID_Envio INT GENERATED AUTO_INCREMENT PRIMARY KEY,
   Id_Venta INT NOT NULL,
   Direccion_Envio VARCHAR2(255) NOT NULL,
   Estado_Envio VARCHAR2(50) DEFAULT 'Pendiente de preparación', 
@@ -114,7 +114,7 @@ CREATE TABLE Envios (
 --             Tabla Historial_Estado_Envío
 -- -----------------------------------------------------
 CREATE TABLE Historial_Estado_Envio (
-  ID_Historial INT GENERATED AS IDENTITY PRIMARY KEY,
+  ID_Historial INT AUTO_INCREMENT PRIMARY KEY,
   ID_Envio INT NOT NULL,
   FechaHora TIMESTAMP DEFAULT SYSTIMESTAMP, 
   Estado_Envio VARCHAR2(50) NOT NULL, 
@@ -127,7 +127,7 @@ CREATE TABLE Historial_Estado_Envio (
 --                Tabla Opción_Envío
 -- -----------------------------------------------------
 CREATE TABLE Opcion_Envio (
-  ID_Opcion_Envio INT GENERATED AS IDENTITY PRIMARY KEY,
+  ID_Opcion_Envio INT AUTO_INCREMENT PRIMARY KEY,
   Nombre_Opcion VARCHAR2(100) NOT NULL, 
   Descripcion VARCHAR2(255) NULL, 
   Coste NUMBER(7, 2) NOT NULL,
@@ -138,11 +138,21 @@ CREATE TABLE Opcion_Envio (
 --               Tabla Transportista
 -- -----------------------------------------------------
 CREATE TABLE Transportista (
-  ID_Transportista INT GENERATED AS IDENTITY PRIMARY KEY, 
+  ID_Transportista INT AUTO_INCREMENT PRIMARY KEY, 
   Nombre VARCHAR(100) NOT NULL, 
   InfoContacto VARCHAR2(255) NULL, 
   Activo CHAR(1) DEFAULT 'S' CHECK (Activo IN ('S', 'N')) 
 );
 
--- Mensaje de confirmación
+-- Disparador para actualizar el stock --
+CREATE TRIGGER actualizar_stock_post_venta
+AFTER INSERT ON Detalle_Venta
+FOR EACH ROW
+BEGIN
+    UPDATE Productos
+    SET Stock = Stock - NEW.Cantidad 
+    WHERE ID_Producto = NEW.ID_Producto; 
+END;
+
+-- Mensaje de confirmación --
 SELECT 'Base de datos reinicializada correctamente' AS Mensaje;
