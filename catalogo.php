@@ -55,10 +55,15 @@ $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <label><input type="checkbox" name="categorias[]" value="Accesorios" <?= in_array("Accesorios", $_GET['categorias'] ?? []) ? 'checked' : '' ?>> Accesorios</label>
                 </div>
                 <div class="button-container">
-                    <button type="submit">Filtrar</button>
-                    <a href="catalogo.php">Limpiar Filtros</a>
+                    <button class= "login-btn" type="submit">Filtrar</button>
+                    <button class="login-btn" type="reset" id="reset-btn">Limpiar Filtros</button>
                 </div>
             </form>
+            <script>
+                document.getElementById('reset-btn').addEventListener('click', function() {
+                    window.location.href = 'catalogo.php';
+                });
+            </script>
         </div>
 
         <section id="galeria-actividades">
