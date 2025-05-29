@@ -18,15 +18,15 @@ INSERT INTO Clientes (Nombre, Apellidos, Correo, Telefono, Nacimiento, Contrasen
 --               Inserción de Productos
 -- -----------------------------------------------------
 INSERT INTO Productos (GTIN, Nombre, Contenido, Edicion, Rarezas, Stock, Precio_Compra, Precio_Venta, Categoria, ImagenURL) VALUES
-    ('7891234560123', 'Pack de cartas: Chispas Fulgurantes', '10 cartas de juego', 'Pokémon Escarlata y Púrpura', 'Incluye posibilidad de cartas holográficas', 50, 2.50, 5.00, 'Boosters', 'imgs/chispas.jpg'),
-    ('7891234560124', 'Pack de cartas: Silver Tempest', '10 cartas de juego', 'Espada y Escudo', '1 carta holográfica garantizada', 45, 2.50, 5.00, 'Boosters', 'imgs/silvertempest.jpeg'),
-    ('7891234560125', 'Charizard PSA 10', '1 carta gradada', 'Base Set', 'Holográfica First Edition', 1, 8000.00, 10000.00, 'Cartas Gradadas', 'imgs/charizard.jpeg'),
-    ('7891234560126', 'Lote de sobres: Brecha Paradójica', '36 sobres sellados', 'Espada y Escudo', NULL, 30, 15.00, 30.00, 'Lotes', 'imgs/brechaparadojica.jpeg'),
-    ('7891234560127', 'Lote de paquetes: Charizard', '24 sobres sellados', 'Evoluciones', 'Posibilidad de Charizard holográfico', 25, 15.00, 30.00, 'Lotes', 'imgs/lotecharizard.jpeg'),
-    ('7891234560128', 'Sobre de cartas: Journey Together', '5 cartas de juego', 'Sol y Luna', NULL, 40, 2.50, 5.00, 'Boosters', 'imgs/journeytogether.jpeg'),
-    ('7891234560129', 'Fundas para cartas (x100)', NULL, NULL, NULL, 200, 0.50, 1.00, 'Accesorios', 'imgs/fundas.jpeg'),
-    ('7891234560130', 'Estuche metálico para cartas', NULL, NULL, NULL, 35, 1.50, 3.00, 'Accesorios', 'imgs/estuche.jpeg'),
-    ('7891234560131', 'Pikachu PSA 10', '1 carta gradada', 'Base Set 1ª Edición', 'Holográfica Gem Mint', 1, 60000.00, 80000.00, 'Cartas Gradadas', 'imgs/pikachu.jpeg');
+    ('7891234560123', 'Pack de cartas: Chispas Fulgurantes', '10 cartas de juego', 'Pokémon Escarlata y Púrpura', 'Incluye posibilidad de cartas holográficas', 50, 2.50, 5.00, 1, 'imgs/chispas.jpg'),
+    ('7891234560124', 'Pack de cartas: Silver Tempest', '10 cartas de juego', 'Espada y Escudo', '1 carta holográfica garantizada', 45, 2.50, 5.00, 1, 'imgs/silvertempest.jpeg'),
+    ('7891234560125', 'Charizard PSA 10', '1 carta gradada', 'Base Set', 'Holográfica First Edition', 1, 8000.00, 10000.00, 2, 'imgs/charizard.jpeg'),
+    ('7891234560126', 'Lote de sobres: Brecha Paradójica', '36 sobres sellados', 'Espada y Escudo', NULL, 30, 15.00, 30.00, 3, 'imgs/brechaparadojica.jpeg'),
+    ('7891234560127', 'Lote de paquetes: Charizard', '24 sobres sellados', 'Evoluciones', 'Posibilidad de Charizard holográfico', 25, 15.00, 30.00, 3, 'imgs/lotecharizard.jpeg'),
+    ('7891234560128', 'Sobre de cartas: Journey Together', '5 cartas de juego', 'Sol y Luna', NULL, 40, 2.50, 5.00, 1, 'imgs/journeytogether.jpeg'),
+    ('7891234560129', 'Fundas para cartas (x100)', NULL, NULL, NULL, 200, 0.50, 1.00, 4, 'imgs/fundas.jpeg'),
+    ('7891234560130', 'Estuche metálico para cartas', NULL, NULL, NULL, 35, 1.50, 3.00, 4, 'imgs/estuche.jpeg'),
+    ('7891234560131', 'Pikachu PSA 10', '1 carta gradada', 'Base Set 1ª Edición', 'Holográfica Gem Mint', 1, 60000.00, 80000.00, 2, 'imgs/pikachu.jpeg');
     
 -- -----------------------------------------------------
 --              Inserción de Transportistas
@@ -52,9 +52,9 @@ INSERT INTO Opcion_Envio (Nombre_Opcion, Descripcion, Coste, Activa) VALUES
 -- -----------------------------------------------------
 -- Luego al realizar las ventas debería de seguir rellenándose esta tabla --
 INSERT INTO Venta (Id_Cliente, Fecha, Cantidad_de_Productos, Subtotal_Productos, Id_Opcion_Envio, Coste_Envio_Aplicado, Total) VALUES
-(1, TO_DATE('2025-05-20', 'YYYY-MM-DD'), 2, 10.00, 1, 3.50, 13.50),
-(2, TO_DATE('2025-05-21', 'YYYY-MM-DD'), 3, 10006.00, 2, 6.50, 10012.50),
-(6, TO_DATE('2025-05-22', 'YYYY-MM-DD'), 1, 5.00, 3, 2.00, 7.00);
+(1, '2025-05-20', 2, 10.00, 1, 3.50, 13.50),
+(2, '2025-05-21', 3, 10006.00, 2, 6.50, 10012.50),
+(6, '2025-05-22', 1, 5.00, 3, 2.00, 7.00);
 
 -- -----------------------------------------------------
 --          Inserción de Detalle_Venta (Ejemplos)
@@ -76,7 +76,7 @@ INSERT INTO Detalle_Venta (Id_Venta, Id_Producto, Nombre, Categoria, GTIN_Produc
 -- -----------------------------------------------------
 -- Envio para Venta 1 --
 INSERT INTO Envios (Id_Venta, Direccion_Envio, Estado_Envio, Fecha_Estimada_Entrega, Num_Seguimiento, Transportista_Asignado, Fecha_Creacion_Envio) VALUES
-(1, 'Calle Primavera 23, Madrid', '¡Preparado!', '2025-05-28', 'TRKMARIA001', 'Correos Express', TO_DATE('2025-05-21', 'YYYY-MM-DD')),
+(1, 'Calle Primavera 23, Madrid', '¡Preparado!', '2025-05-28', 'TRKMARIA001', 'Correos Express', '2025-05-21'),
 -- Envio para Venta 2 --
 (2, 'Avenida Libertad 45, Barcelona', 'Enviado', '2025-05-25', 'TRKJUAN002', 'SEUR', '2025-05-22'),
 -- Envio para Venta 3 --
