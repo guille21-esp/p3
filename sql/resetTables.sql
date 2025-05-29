@@ -50,10 +50,10 @@ CREATE TABLE Productos(
   Edicion VARCHAR(255) NULL,
   Rarezas VARCHAR(255) NULL,
   Stock INT DEFAULT 0, 
-  Precio_Compra DECIMAL(7, 2),
+  Precio_Compra DECIMAL(10, 2),
   Precio_Venta DECIMAL(10, 2) NOT NULL, 
   ID_Categoria INT NULL, 
-  ImagenURL VARCHAR(255) NULL 
+  ImagenURL VARCHAR(255) NULL, 
   CONSTRAINT FK_Producto_Categoria FOREIGN KEY (ID_Categoria) REFERENCES Categorias(ID_Categoria)
 ) ENGINE=InnoDB;
 
