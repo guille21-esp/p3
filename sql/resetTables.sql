@@ -26,6 +26,7 @@ DROP TABLE IF EXISTS Envios;
 DROP TABLE IF EXISTS Detalle_Carrito;
 DROP TABLE IF EXISTS Carrito_Ventas;
 DROP TABLE IF EXISTS Productos;
+DROP TABLE IF EXISTS Categorias;
 DROP TABLE IF EXISTS Clientes;
 
 -- Reactivar las restricciones de clave foránea
