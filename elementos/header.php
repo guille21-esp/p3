@@ -6,10 +6,12 @@ session_start();
 
 <header class="cabecera">
   <section class="barra_superior">
-    <figure class="logoynombre">
-      <img src="imgs/pokeball.gif" alt="Logo">
-      <figcaption>Gotta Collect 'Em All</figcaption>
-    </figure>
+  <a href="catalogo.php" class="logoynombre">
+  <img src="imgs/pokeball.gif" alt="Logo">
+  <figcaption>Gotta Collect 'Em All</figcaption>
+</a>
+
+
 
     <div class="saludo-usuario">
       <?php if (isset($_SESSION['nombreUsuario'])): ?>

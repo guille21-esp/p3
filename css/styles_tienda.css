@@ -48,6 +48,22 @@ body {
     color: #f1f1f1; /* Color original */
 }
 
+.logoynombre {
+    text-decoration: none;  /* Sin subrayado */
+    color: inherit;         /* Hereda color del figcaption */
+}
+
+.logoynombre:hover {
+    text-decoration: none;  /* Asegura que en hover tampoco haya subrayado */
+}
+
+.logoynombre figcaption {
+    margin-left: 20px;      /* Separación respecto a la imagen */
+    color: #f1f1f1;         /* Mantiene el color */
+    text-decoration: none;  /* Asegura que el texto no esté subrayado */
+}
+
+
 
 /* Galería de productos */
 #contenedor-actividades {
