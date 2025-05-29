@@ -15,7 +15,8 @@ $campos = [
     'tlf' => '',
     'intereses' => '',
     'compra' => '',
-    'coleccion' => ''
+    'coleccion' => '',
+    'password' => ''
 ];
 
 $error = [
@@ -26,7 +27,8 @@ $error = [
     'tlf' => '',
     'intereses' => '',
     'compra' => '',
-    'coleccion' => ''
+    'coleccion' => '',
+    'password' => ''
 ];
 
 // 2. Procesamos el formulario cuando se envía la primera vez
@@ -59,6 +61,12 @@ if ($formSent) {
         $error['email'] = "El email no puede estar vacío.";
     else if(!filter_var($campos['email'], FILTER_VALIDATE_EMAIL))
         $error['email'] = "El email no es válido.";
+
+    if (empty($campos['password']))
+        $error['password'] = "La contraseña es obligatoria.";
+    else if (strlen($campos['password']) < 6)
+        $error['password'] = "La contraseña debe tener al menos 6 caracteres.";
+     
 
     $allOK = !array_filter($error);
 
@@ -136,6 +144,15 @@ if ($formSent) {
                     <span class="error"><?= $error['tlf']; ?></span>
                 <?php endif; ?>
             </section>
+
+            <section class="form-linea">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required>
+                <?php if (!empty($error['password'])): ?>
+                    <span class="error"><?= $error['password']; ?></span>
+                <?php endif; ?>
+            </section>
+
 
             <section class="form-linea">
                 <label for="lista_intereses">¿Cuales son tus intereses?</label>
