@@ -76,31 +76,41 @@ INSERT INTO Detalle_Venta (Id_Venta, Id_Producto, Nombre, Categoria, GTIN_Produc
 -- -----------------------------------------------------
 -- Envio para Venta 1 --
 INSERT INTO Envios (Id_Venta, Direccion_Envio, Estado_Envio, Fecha_Estimada_Entrega, Num_Seguimiento, Transportista_Asignado, Fecha_Creacion_Envio) VALUES
-(1, 'Calle Primavera 23, Madrid', '¡Preparado!', TO_DATE('2025-05-28', 'YYYY-MM-DD'), 'TRKMARIA001', 'Correos Express', TO_DATE('2025-05-21', 'YYYY-MM-DD')),
+(1, 'Calle Primavera 23, Madrid', '¡Preparado!', '2025-05-28', 'TRKMARIA001', 'Correos Express', TO_DATE('2025-05-21', 'YYYY-MM-DD')),
 -- Envio para Venta 2 --
-(2, 'Avenida Libertad 45, Barcelona', 'Enviado', TO_DATE('2025-05-25', 'YYYY-MM-DD'), 'TRKJUAN002', 'SEUR', TO_DATE('2025-05-22', 'YYYY-MM-DD')),
+(2, 'Avenida Libertad 45, Barcelona', 'Enviado', '2025-05-25', 'TRKJUAN002', 'SEUR', '2025-05-22'),
 -- Envio para Venta 3 --
-(3, 'Paseo Marítimo 89, Málaga', 'Entregado', TO_DATE('2025-05-26', 'YYYY-MM-DD'), 'TRKPRUEBA003', 'MRW', TO_DATE('2025-05-23', 'YYYY-MM-DD'));
+(3, 'Paseo Marítimo 89, Málaga', 'Entregado', '2025-05-26', 'TRKPRUEBA003', 'MRW', '2025-05-23');
 
 -- -----------------------------------------------------
 --         Inserción de Historial_Estado_Envío
 -- -----------------------------------------------------
 INSERT INTO Historial_Estado_Envio (ID_Envio, FechaHora, Estado_Envio, Ubicacion, Notas) VALUES
 -- Historial para el Envío 1 --
-(1, TO_TIMESTAMP('2025-05-21 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), 'Nuevo Pedido', 'Sistema', 'Pedido confirmado por el cliente.'),
-(1, TO_TIMESTAMP('2025-05-21 10:30:00', 'YYYY-MM-DD HH24:MI:SS'), 'En preparación', 'Almacén Central', 'Productos siendo recolectados.'),
-(1, TO_TIMESTAMP('2025-05-21 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), '¡Preparado!', 'Almacén Central', 'Paquete listo para recogida por transportista.'),
--- Historial para el Envío 2 --
-(2, TO_TIMESTAMP('2025-05-22 09:00:00', 'YYYY-MM-DD HH24:MI:SS'), 'Nuevo Pedido', 'Sistema', 'Pedido confirmado.'),
-(2, TO_TIMESTAMP('2025-05-22 09:30:00', 'YYYY-MM-DD HH24:MI:SS'), 'En preparación', 'Almacén Central', NULL),
-(2, TO_TIMESTAMP('2025-05-22 17:00:00', 'YYYY-MM-DD HH24:MI:SS'), '¡Preparado!', 'Almacén Central', 'Listo para envío.'),
-(2, TO_TIMESTAMP('2025-05-23 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), 'Enviado', 'Centro Logístico SEUR Madrid', 'En tránsito hacia Barcelona.'),
--- Historial para el Envío 3 --
-(3, TO_TIMESTAMP('2025-05-23 11:00:00', 'YYYY-MM-DD HH24:MI:SS'), 'Nuevo Pedido', 'Sistema', 'Pedido procesado.'),
-(3, TO_TIMESTAMP('2025-05-23 11:30:00', 'YYYY-MM-DD HH24:MI:SS'), 'En preparación', 'Almacén Central', 'Empaquetando...'),
-(3, TO_TIMESTAMP('2025-05-23 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), '¡Preparado!', 'Almacén Central', 'Paquete listo.'),
-(3, TO_TIMESTAMP('2025-05-23 19:00:00', 'YYYY-MM-DD HH24:MI:SS'), 'Enviado', 'Plataforma MRW Getafe', 'En tránsito.'),
-(3, TO_TIMESTAMP('2025-05-26 10:30:00', 'YYYY-MM-DD HH24:MI:SS'), 'Entregado', 'Paseo Marítimo 89, Málaga', 'Entregado y firmado por el destinatario.');
+(1, '2025-05-21 10:00:00', 'Nuevo Pedido', 'Sistema', 'Pedido confirmado por el cliente.'),
+(1, '2025-05-21 10:30:00', 'En preparación', 'Almacén Central', 'Productos siendo recolectados.'),
+(1, '2025-05-21 18:00:00', '¡Preparado!', 'Almacén Central', 'Paquete listo para recogida por transportista.'),
+-- Historial para el Envío 2
+(2, '2025-05-22 09:00:00', 'Nuevo Pedido', 'Sistema', 'Pedido confirmado.'),
+(2, '2025-05-22 09:30:00', 'En preparación', 'Almacén Central', NULL),
+(2, '2025-05-22 17:00:00', '¡Preparado!', 'Almacén Central', 'Listo para envío.'),
+(2, '2025-05-23 10:00:00', 'Enviado', 'Centro Logístico SEUR Madrid', 'En tránsito hacia Barcelona.'),
+-- Historial para el Envío 3
+(3, '2025-05-23 11:00:00', 'Nuevo Pedido', 'Sistema', 'Pedido procesado.'),
+(3, '2025-05-23 11:30:00', 'En preparación', 'Almacén Central', 'Empaquetando...'),
+(3, '2025-05-23 18:00:00', '¡Preparado!', 'Almacén Central', 'Paquete listo.'),
+(3, '2025-05-23 19:00:00', 'Enviado', 'Plataforma MRW Getafe', 'En tránsito.'),
+(3, '2025-05-26 10:30:00', 'Entregado', 'Paseo Marítimo 89, Málaga', 'Entregado y firmado por el destinatario.');
+
+-- -----------------------------------------------------
+--             Inserciones de Categorias
+-- -----------------------------------------------------
+INSERT INTO Categorias (Nombre_Categoria) VALUES
+('Boosters'),
+('Cartas Gradadas'),
+('Lotes'),
+('Accesorios'),
+('Cartas Sueltas'); 
 
 -- -----------------------------------------------------
 --               Mensaje de Confirmación
@@ -114,3 +124,4 @@ SELECT COUNT(*) AS Total_Ventas FROM Venta;
 SELECT COUNT(*) AS Total_Detalles_Venta FROM Detalle_Venta;
 SELECT COUNT(*) AS Total_Envios FROM Envios;
 SELECT COUNT(*) AS Total_Historial_Envios FROM Historial_Estado_Envio;
+SELECT COUNT(*) AS Total_Categorias FROM Categorias;
