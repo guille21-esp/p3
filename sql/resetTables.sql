@@ -32,6 +32,14 @@ DROP TABLE IF EXISTS Clientes;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- -----------------------------------------------------
+--                Tabla Categorias
+-- -----------------------------------------------------
+CREATE TABLE Categorias (
+  ID_Categoria INT AUTO_INCREMENT PRIMARY KEY,
+  Nombre_Categoria VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- -----------------------------------------------------
 --                  Tabla Productos
 -- -----------------------------------------------------
 CREATE TABLE Productos(
@@ -44,8 +52,9 @@ CREATE TABLE Productos(
   Stock INT DEFAULT 0, 
   Precio_Compra DECIMAL(7, 2),
   Precio_Venta DECIMAL(10, 2) NOT NULL, 
-  Categoria VARCHAR(20), 
+  ID_Categoria INT NULL, 
   ImagenURL VARCHAR(255) NULL 
+  CONSTRAINT FK_Producto_Categoria FOREIGN KEY (ID_Categoria) REFERENCES Categorias(ID_Categoria)
 ) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
