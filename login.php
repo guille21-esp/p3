@@ -21,11 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 //      El if de arriba se usará cuando se guarden las contraseñas hasheadas
 //      que todavía no está implementado el crear sesión como tal
         
-        if ($cliente){
-            if ($clave === $cliente['Contrasena']){
-                $_SESSION['idCliente'] = $cliente['ID_Cliente'];
-                $_SESSION['nombreUsuario'] = $cliente['Nombre'];
-                $idCliente = $cliente['ID_Cliente'];
+        if ($cliente && password_verify($clave, $cliente['Contrasena'])) {
+            $_SESSION['idCliente'] = $cliente['ID_Cliente'];
+            $_SESSION['nombreUsuario'] = $cliente['Nombre'];
+            $idCliente = $cliente['ID_Cliente'];
 
                 // Fusión de carrito temporal si existe
                 if(isset($_COOKIE['cart_token'])) {
@@ -98,9 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     header('Location: catalogo.php');
                 }
-            } else {
-                $errores = "Contrasena incorrecta.";
-            } 
+             
         } else {
             $errores = "No existe un cliente con ese correo";
         }
